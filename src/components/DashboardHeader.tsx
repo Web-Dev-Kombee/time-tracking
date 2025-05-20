@@ -12,6 +12,7 @@ import {
   PauseCircle,
 } from "lucide-react";
 import { NotificationDropdown } from "./NotificationDropdown";
+import { ModeToggle } from "./mode-toggle";
 
 export default function DashboardHeader() {
   const { data: session } = useSession();
@@ -31,15 +32,15 @@ export default function DashboardHeader() {
   };
 
   return (
-    <header className="bg-white border-b px-4 py-3 flex items-center justify-between">
+    <header className="bg-background border-b px-4 py-3 flex items-center justify-between">
       {/* Left side - Quick Timer */}
       <div className="flex items-center">
         <button
           onClick={toggleTimer}
           className={`flex items-center gap-2 py-1.5 px-3 rounded-md ${
             isTimerRunning
-              ? "text-red-600 hover:bg-red-50"
-              : "text-green-600 hover:bg-green-50"
+              ? "text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
+              : "text-green-600 hover:bg-green-50 dark:hover:bg-green-950"
           }`}
         >
           {isTimerRunning ? (
@@ -56,8 +57,11 @@ export default function DashboardHeader() {
         </button>
       </div>
 
-      {/* Right side - user account, notifications */}
+      {/* Right side - theme toggle, user account, notifications */}
       <div className="flex items-center gap-4">
+        {/* Theme Toggle */}
+        <ModeToggle />
+
         {/* Notifications */}
         <NotificationDropdown />
 
@@ -65,9 +69,9 @@ export default function DashboardHeader() {
         <div className="relative">
           <button
             onClick={toggleUserMenu}
-            className="flex items-center gap-2 hover:bg-gray-100 rounded-md p-1.5"
+            className="flex items-center gap-2 hover:bg-accent rounded-md p-1.5"
           >
-            <div className="w-7 h-7 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center">
+            <div className="w-7 h-7 bg-primary/10 text-primary rounded-full flex items-center justify-center">
               {session?.user?.name?.[0] || <User size={16} />}
             </div>
             <span className="text-sm font-medium hidden sm:inline-block">
@@ -77,10 +81,10 @@ export default function DashboardHeader() {
           </button>
 
           {userMenuOpen && (
-            <div className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg z-10 border">
+            <div className="absolute right-0 mt-2 w-56 bg-background rounded-md shadow-lg z-10 border">
               <div className="p-3 border-b">
                 <p className="font-medium text-sm">{session?.user?.name}</p>
-                <p className="text-xs text-gray-500 truncate">
+                <p className="text-xs text-muted-foreground truncate">
                   {session?.user?.email}
                 </p>
               </div>
@@ -88,7 +92,7 @@ export default function DashboardHeader() {
                 <li>
                   <Link
                     href="/dashboard/profile"
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-accent"
                   >
                     <User size={16} />
                     Profile
@@ -97,7 +101,7 @@ export default function DashboardHeader() {
                 <li>
                   <Link
                     href="/dashboard/settings"
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-accent"
                   >
                     <Settings size={16} />
                     Settings
@@ -107,7 +111,7 @@ export default function DashboardHeader() {
               <div className="border-t py-1">
                 <button
                   onClick={handleSignOut}
-                  className="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                  className="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-accent"
                 >
                   <LogOut size={16} />
                   Sign out

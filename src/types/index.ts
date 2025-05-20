@@ -29,9 +29,11 @@ declare module "next-auth/jwt" {
 
 // User related types
 export enum UserRole {
+  SUPER_ADMIN = "SUPER_ADMIN",
   ADMIN = "ADMIN",
-  MANAGER = "MANAGER",
-  USER = "USER",
+  ACCOUNTS = "ACCOUNTS",
+  SALES = "SALES",
+  EMPLOYEE = "EMPLOYEE",
 }
 
 export enum SubscriptionTier {

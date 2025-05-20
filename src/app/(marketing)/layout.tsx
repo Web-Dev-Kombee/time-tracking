@@ -44,12 +44,12 @@ export default function MarketingLayout({
           </div>
           <div className="flex items-center gap-4">
             <ModeToggle />
-            <Link href="/api/auth/signin">
+            <Link href="/login">
               <Button variant="outline" size="sm">
                 Sign in
               </Button>
             </Link>
-            <Link href="/api/auth/signup">
+            <Link href="/register">
               <Button size="sm">Sign up</Button>
             </Link>
           </div>

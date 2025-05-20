@@ -1,42 +1,40 @@
-import {
-  ArrowRight,
-  BarChart3,
-  Clock,
-  FileSpreadsheet
-} from "lucide-react";
+import { ArrowRight, BarChart3, Clock, FileSpreadsheet } from "lucide-react";
 import Link from "next/link";
+import { ModeToggle } from "@/components/mode-toggle";
+import {
+  APP_NAME,
+  MARKETING_HERO,
+  MARKETING_FEATURES,
+  MARKETING_CTA,
+  MARKETING_FOOTER,
+  MARKETING_NAV,
+} from "@/constants";
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="border-b">
+      <header className="border-b bg-background">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Clock className="h-6 w-6 text-blue-600" />
-            <span className="text-xl font-bold">TimeTrack</span>
+            <Clock className="h-6 w-6 text-primary" />
+            <span className="text-xl font-bold">{APP_NAME}</span>
           </div>
           <nav className="hidden md:flex items-center gap-6">
-            <Link
-              href="/features"
-              className="text-sm font-medium hover:text-blue-600"
-            >
-              Features
-            </Link>
-            <Link
-              href="/pricing"
-              className="text-sm font-medium hover:text-blue-600"
-            >
-              Pricing
-            </Link>
-            <Link
-              href="/login"
-              className="text-sm font-medium hover:text-blue-600"
-            >
-              Log in
-            </Link>
+            {MARKETING_NAV.map((item, index) =>
+              item.label !== "Sign up free" ? (
+                <Link
+                  key={index}
+                  href={item.href}
+                  className="text-sm font-medium hover:text-primary"
+                >
+                  {item.label}
+                </Link>
+              ) : null
+            )}
+            <ModeToggle />
             <Link
               href="/register"
-              className="text-sm font-medium bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+              className="text-sm font-medium bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90"
             >
               Sign up free
             </Link>
@@ -61,27 +59,26 @@ export default function Home() {
       </header>
 
       <main className="flex-1">
-        <section className="py-20 md:py-28">
+        <section className="py-20 md:py-28 bg-background">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Time tracking that works for{" "}
-              <span className="text-blue-600">your business</span>
+              {MARKETING_HERO.title.split("your business")[0]}
+              <span className="text-primary">your business</span>
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-10">
-              Track time, manage projects, and create professional invoices. All
-              in one simple app designed for freelancers and small teams.
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-10">
+              {MARKETING_HERO.description}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/register"
-                className="bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 flex items-center justify-center gap-2"
+                className="bg-primary text-primary-foreground px-6 py-3 rounded-md font-medium hover:bg-primary/90 flex items-center justify-center gap-2"
               >
                 Get started for free
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/demo"
-                className="border border-gray-300 px-6 py-3 rounded-md font-medium hover:bg-gray-50"
+                className="border border-input bg-background px-6 py-3 rounded-md font-medium hover:bg-accent"
               >
                 See a demo
               </Link>
@@ -89,94 +86,76 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 bg-muted">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-12">
-              Everything you need in one place
+              {MARKETING_FEATURES.title}
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
-              <div className="bg-white p-6 rounded-lg shadow-sm">
-                <div className="bg-blue-100 p-3 rounded-full w-fit mb-4">
-                  <Clock className="h-6 w-6 text-blue-600" />
-                </div>
-                <h3 className="text-xl font-bold mb-2">Time Tracking</h3>
-                <p className="text-gray-600">
-                  Track time on projects with a simple one-click timer. View
-                  detailed reports and analyze where your time goes.
-                </p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-sm">
-                <div className="bg-blue-100 p-3 rounded-full w-fit mb-4">
-                  <FileSpreadsheet className="h-6 w-6 text-blue-600" />
-                </div>
-                <h3 className="text-xl font-bold mb-2">Invoice & Billing</h3>
-                <p className="text-gray-600">
-                  Create professional invoices automatically based on tracked
-                  time and expenses. Get paid faster with online payments.
-                </p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-sm">
-                <div className="bg-blue-100 p-3 rounded-full w-fit mb-4">
-                  <BarChart3 className="h-6 w-6 text-blue-600" />
-                </div>
-                <h3 className="text-xl font-bold mb-2">Reports & Analytics</h3>
-                <p className="text-gray-600">
-                  Gain insights into your business with detailed reports. Track
-                  profitability and manage your time more effectively.
-                </p>
-              </div>
+              {MARKETING_FEATURES.features.map((feature, index) => {
+                const icons = [
+                  <Clock key="clock" className="h-6 w-6 text-primary" />,
+                  <FileSpreadsheet
+                    key="file"
+                    className="h-6 w-6 text-primary"
+                  />,
+                  <BarChart3 key="chart" className="h-6 w-6 text-primary" />,
+                ];
+
+                return (
+                  <div key={index} className="bg-card p-6 rounded-lg shadow-sm">
+                    <div className="bg-primary/10 p-3 rounded-full w-fit mb-4">
+                      {icons[index]}
+                    </div>
+                    <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+                    <p className="text-muted-foreground">
+                      {feature.description}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
 
-        <section className="py-16">
+        <section className="py-16 bg-background">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-6">Ready to get started?</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
-              Join thousands of freelancers and small businesses who trust
-              TimeTrack for their time tracking and invoicing needs.
+            <h2 className="text-3xl font-bold mb-6">{MARKETING_CTA.title}</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+              {MARKETING_CTA.description}
             </p>
             <Link
               href="/register"
-              className="bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 inline-flex items-center gap-2"
+              className="bg-primary text-primary-foreground px-6 py-3 rounded-md font-medium hover:bg-primary/90 inline-flex items-center gap-2"
             >
-              Start your free trial
+              {MARKETING_CTA.buttonText}
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </section>
       </main>
 
-      <footer className="border-t py-12">
+      <footer className="border-t py-12 bg-background">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center gap-2 mb-4 md:mb-0">
-              <Clock className="h-5 w-5 text-blue-600" />
-              <span className="font-bold">TimeTrack</span>
+              <Clock className="h-5 w-5 text-primary" />
+              <span className="font-bold">{APP_NAME}</span>
             </div>
             <div className="flex gap-6">
-              <Link
-                href="/privacy"
-                className="text-sm text-gray-600 hover:text-blue-600"
-              >
-                Privacy
-              </Link>
-              <Link
-                href="/terms"
-                className="text-sm text-gray-600 hover:text-blue-600"
-              >
-                Terms
-              </Link>
-              <Link
-                href="/contact"
-                className="text-sm text-gray-600 hover:text-blue-600"
-              >
-                Contact
-              </Link>
+              {MARKETING_FOOTER.links.map((link, index) => (
+                <Link
+                  key={index}
+                  href={link.href}
+                  className="text-sm text-muted-foreground hover:text-primary"
+                >
+                  {link.label}
+                </Link>
+              ))}
             </div>
           </div>
-          <div className="mt-8 text-center text-sm text-gray-600">
-            © {new Date().getFullYear()} TimeTrack. All rights reserved.
+          <div className="mt-8 text-center text-sm text-muted-foreground">
+            {MARKETING_FOOTER.copyright(new Date().getFullYear())}
           </div>
         </div>
       </footer>

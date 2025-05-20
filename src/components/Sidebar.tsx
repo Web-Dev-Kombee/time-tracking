@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 import {
   Clock,
   LayoutDashboard,
@@ -17,7 +18,14 @@ import {
   ActivitySquare,
   BellRing,
   DollarSign,
+  Shield,
+  User,
+  LucideIcon,
 } from "lucide-react";
+import { getAuthorizedNavItems } from "@/lib/rbac";
+import { UserRole } from "@/types";
+import { cn } from "@/lib/utils";
+import { ALL_NAV_ITEMS } from "@/constants";
 
 interface NavItemProps {
   href: string;
@@ -30,14 +38,15 @@ function NavItem({ href, icon, label, isActive }: NavItemProps) {
   return (
     <Link
       href={href}
-      className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${
+      className={cn(
+        "flex items-center gap-3 px-3 py-2 rounded-md transition-colors",
         isActive
-          ? "bg-blue-100 text-blue-700"
-          : "text-gray-700 hover:text-blue-700 hover:bg-blue-50"
-      }`}
+          ? "bg-primary/10 text-primary font-medium"
+          : "text-foreground hover:text-primary hover:bg-primary/5"
+      )}
     >
       {icon}
-      <span className="text-sm font-medium">{label}</span>
+      <span className="text-sm">{label}</span>
     </Link>
   );
 }
@@ -45,6 +54,8 @@ function NavItem({ href, icon, label, isActive }: NavItemProps) {
 export default function Sidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const { data: session } = useSession();
+  const userRole = (session?.user?.role as UserRole) || UserRole.EMPLOYEE;
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -57,69 +68,45 @@ export default function Sidebar() {
     return pathname.startsWith(href) && href !== "/dashboard";
   };
 
-  const navItems = [
-    {
-      href: "/dashboard",
-      icon: <LayoutDashboard size={18} />,
-      label: "Dashboard",
-    },
-    {
-      href: "/dashboard/time",
-      icon: <Clock size={18} />,
-      label: "Time Tracking",
-    },
-    {
-      href: "/dashboard/clients",
-      icon: <Users size={18} />,
-      label: "Clients",
-    },
-    {
-      href: "/dashboard/projects",
-      icon: <FolderKanban size={18} />,
-      label: "Projects",
-    },
-    {
-      href: "/dashboard/invoices",
-      icon: <FileSpreadsheet size={18} />,
-      label: "Invoices",
-    },
-    {
-      href: "/dashboard/expenses",
-      icon: <Receipt size={18} />,
-      label: "Expenses",
-    },
-    {
-      href: "/dashboard/activity",
-      icon: <ActivitySquare size={18} />,
-      label: "Activity",
-    },
-    {
-      href: "/dashboard/reports/revenue",
-      icon: <DollarSign size={18} />,
-      label: "Revenue",
-    },
-    {
-      href: "/dashboard/reports",
-      icon: <BarChart3 size={18} />,
-      label: "Reports",
-    },
-    {
-      href: "/dashboard/settings",
-      icon: <Settings size={18} />,
-      label: "Settings",
-    },
-    {
-      href: "/dashboard/notifications",
-      icon: <BellRing size={18} />,
-      label: "Notifications",
-    },
-  ];
+  // Function to get the icon component from icon name
+  const getIconComponent = (iconName: string, size = 18) => {
+    const icons: Record<string, LucideIcon> = {
+      LayoutDashboard,
+      Clock,
+      Users,
+      FolderKanban,
+      FileSpreadsheet,
+      Receipt,
+      BarChart3,
+      Settings,
+      ActivitySquare,
+      BellRing,
+      DollarSign,
+      Shield,
+      User,
+    };
+
+    const IconComponent = icons[iconName];
+    if (IconComponent) {
+      return <IconComponent size={size} />;
+    }
+    return <Clock size={size} />;
+  };
+
+  // Convert the constants to the format expected by the components
+  const allNavItems = ALL_NAV_ITEMS.map((item) => ({
+    ...item,
+    icon: getIconComponent(item.iconName),
+  }));
+
+  // Filter navigation items based on user's role
+  const navItems = getAuthorizedNavItems(allNavItems, userRole);
 
   return (
     <>
       {/* Mobile sidebar toggle */}
       <button
-        className="md:hidden fixed top-4 left-4 z-30 bg-white p-2 rounded-md shadow-sm"
+        className="md:hidden fixed top-4 left-4 z-30 bg-background p-2 rounded-md shadow-sm border"
         onClick={toggleSidebar}
         aria-label="Toggle sidebar"
       >
@@ -129,22 +116,28 @@ export default function Sidebar() {
       {/* Sidebar background overlay */}
       {isOpen && (
         <div
-          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-20"
+          className="md:hidden fixed inset-0 bg-black/50 z-20"
           onClick={toggleSidebar}
         />
       )}
 
       {/* Sidebar */}
       <aside
-        className={`fixed md:sticky top-0 left-0 h-full z-20 bg-white border-r shadow-sm w-64 transition-transform duration-300 transform ${
+        className={cn(
+          "fixed md:sticky top-0 left-0 h-full z-20 bg-card border-r shadow-sm w-64 transition-transform duration-300 transform",
           isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-        }`}
+        )}
       >
         <div className="p-4 border-b">
           <div className="flex items-center gap-2">
-            <Clock className="h-6 w-6 text-blue-600" />
+            <Clock className="h-6 w-6 text-primary" />
             <span className="text-xl font-bold">TimeTrack</span>
           </div>
+          {session?.user && (
+            <div className="mt-2 text-sm text-muted-foreground">
+              Role: {session.user.role.toLowerCase().replace("_", " ")}
+            </div>
+          )}
         </div>
 
         <nav className="p-3 overflow-y-auto h-[calc(100vh-4rem)]">

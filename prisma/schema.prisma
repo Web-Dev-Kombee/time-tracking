@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,34 +8,22 @@ datasource db {
 }
 
 model User {
-  id            String           @id @default(cuid())
-  name          String?
-  email         String           @unique
-  password      String?
-  image         String?
-  role          UserRole         @default(USER)
-  subscription  SubscriptionTier @default(FREE)
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
-  clients       Client[]
-  projects      Project[]
-  timeEntries   TimeEntry[]
-  expenses      Expense[]
-  invoices      Invoice[]
-  accounts      Account[]
-  sessions      Session[]
-}
-
-enum UserRole {
-  ADMIN
-  MANAGER
-  USER
-}
-
-enum SubscriptionTier {
-  FREE
-  BASIC
-  PREMIUM
+  id           String      @id @default(cuid())
+  name         String?
+  email        String      @unique
+  password     String?
+  image        String?
+  role         String      @default("USER")
+  subscription String      @default("FREE")
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  accounts     Account[]
+  clients      Client[]
+  expenses     Expense[]
+  invoices     Invoice[]
+  projects     Project[]
+  sessions     Session[]
+  timeEntries  TimeEntry[]
 }
 
 model Account {
@@ -57,8 +39,7 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -80,41 +61,35 @@ model VerificationToken {
 }
 
 model Client {
-  id           String    @id @default(cuid())
-  name         String
-  email        String?
-  phone        String?
-  address      String?
-  notes        String?
-  createdById  String
-  createdBy    User      @relation(fields: [createdById], references: [id], onDelete: Cascade)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  projects     Project[]
-  invoices     Invoice[]
+  id          String    @id @default(cuid())
+  name        String
+  email       String?
+  phone       String?
+  address     String?
+  notes       String?
+  createdById String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  createdBy   User      @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  invoices    Invoice[]
+  projects    Project[]
 }
 
 model Project {
   id           String        @id @default(cuid())
   name         String
   description  String?
-  status       ProjectStatus @default(ACTIVE)
+  status       String        @default("ACTIVE")
   clientId     String
-  client       Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
   createdById  String
-  createdBy    User          @relation(fields: [createdById], references: [id], onDelete: Cascade)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  timeEntries  TimeEntry[]
+  hourlyRate   Float         @default(0)
   expenses     Expense[]
   invoiceItems InvoiceItem[]
-  hourlyRate   Float         @default(0)
-}
-
-enum ProjectStatus {
-  ACTIVE
-  COMPLETED
-  ARCHIVED
+  createdBy    User          @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  client       Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  timeEntries  TimeEntry[]
 }
 
 model TimeEntry {
@@ -123,15 +98,15 @@ model TimeEntry {
   startTime     DateTime
   endTime       DateTime?
   projectId     String
-  project       Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
   userId        String
-  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
   invoiceId     String?
-  invoiceItem   InvoiceItem? @relation(fields: [invoiceItemId], references: [id])
   invoiceItemId String?
   billable      Boolean      @default(true)
+  invoiceItem   InvoiceItem? @relation(fields: [invoiceItemId], references: [id])
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project       Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
 }
 
 model Expense {
@@ -142,83 +117,60 @@ model Expense {
   receipt       String?
   billable      Boolean      @default(true)
   projectId     String
-  project       Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
   userId        String
-  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
   invoiceId     String?
-  invoiceItem   InvoiceItem? @relation(fields: [invoiceItemId], references: [id])
   invoiceItemId String?
+  invoiceItem   InvoiceItem? @relation(fields: [invoiceItemId], references: [id])
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project       Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
 }
 
 model Invoice {
   id            String        @id @default(cuid())
   invoiceNumber String        @unique
   clientId      String
-  client        Client        @relation(fields: [clientId], references: [id])
   userId        String
-  user          User          @relation(fields: [userId], references: [id])
   issueDate     DateTime
   dueDate       DateTime
-  status        InvoiceStatus @default(DRAFT)
+  status        String        @default("DRAFT")
   notes         String?
-  items         InvoiceItem[]
-  payments      Payment[]
   subtotal      Float
   tax           Float
   total         Float
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
-}
-
-enum InvoiceStatus {
-  DRAFT
-  SENT
-  PAID
-  OVERDUE
-  CANCELLED
+  user          User          @relation(fields: [userId], references: [id])
+  client        Client        @relation(fields: [clientId], references: [id])
+  items         InvoiceItem[]
+  payments      Payment[]
 }
 
 model InvoiceItem {
   id          String      @id @default(cuid())
   invoiceId   String
-  invoice     Invoice     @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
   description String
   quantity    Float
   unitPrice   Float
   amount      Float
   projectId   String?
-  project     Project?    @relation(fields: [projectId], references: [id])
-  type        ItemType    @default(SERVICE)
-  timeEntries TimeEntry[]
+  type        String      @default("SERVICE")
   expenses    Expense[]
-}
-
-enum ItemType {
-  SERVICE
-  EXPENSE
-  PRODUCT
+  project     Project?    @relation(fields: [projectId], references: [id])
+  invoice     Invoice     @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  timeEntries TimeEntry[]
 }
 
 model Payment {
-  id          String        @id @default(cuid())
-  invoiceId   String
-  invoice     Invoice       @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
-  amount      Float
-  date        DateTime
-  method      PaymentMethod
-  reference   String?
-  notes       String?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-}
-
-enum PaymentMethod {
-  BANK_TRANSFER
-  CREDIT_CARD
-  STRIPE
-  PAYPAL
-  CASH
-  OTHER
+  id        String   @id @default(cuid())
+  invoiceId String
+  amount    Float
+  date      DateTime
+  method    String
+  reference String?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  invoice   Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
 }
