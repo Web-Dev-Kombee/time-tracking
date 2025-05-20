@@ -57,7 +57,7 @@ src/
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/yourusername/time-tracking-app.git
+   git clone https://github.com/Mikesh-kombee/time-tracking-app.git
    cd time-tracking-app
    ```
 
