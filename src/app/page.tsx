@@ -1,102 +1,184 @@
-import Image from "next/image";
+import {
+  ArrowRight,
+  BarChart3,
+  Clock,
+  FileSpreadsheet
+} from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="flex flex-col min-h-screen">
+      <header className="border-b">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Clock className="h-6 w-6 text-blue-600" />
+            <span className="text-xl font-bold">TimeTrack</span>
+          </div>
+          <nav className="hidden md:flex items-center gap-6">
+            <Link
+              href="/features"
+              className="text-sm font-medium hover:text-blue-600"
+            >
+              Features
+            </Link>
+            <Link
+              href="/pricing"
+              className="text-sm font-medium hover:text-blue-600"
+            >
+              Pricing
+            </Link>
+            <Link
+              href="/login"
+              className="text-sm font-medium hover:text-blue-600"
+            >
+              Log in
+            </Link>
+            <Link
+              href="/register"
+              className="text-sm font-medium bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
+            >
+              Sign up free
+            </Link>
+          </nav>
+          <button className="md:hidden">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
         </div>
+      </header>
+
+      <main className="flex-1">
+        <section className="py-20 md:py-28">
+          <div className="container mx-auto px-4 text-center">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+              Time tracking that works for{" "}
+              <span className="text-blue-600">your business</span>
+            </h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-10">
+              Track time, manage projects, and create professional invoices. All
+              in one simple app designed for freelancers and small teams.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/register"
+                className="bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 flex items-center justify-center gap-2"
+              >
+                Get started for free
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/demo"
+                className="border border-gray-300 px-6 py-3 rounded-md font-medium hover:bg-gray-50"
+              >
+                See a demo
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-12">
+              Everything you need in one place
+            </h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <div className="bg-blue-100 p-3 rounded-full w-fit mb-4">
+                  <Clock className="h-6 w-6 text-blue-600" />
+                </div>
+                <h3 className="text-xl font-bold mb-2">Time Tracking</h3>
+                <p className="text-gray-600">
+                  Track time on projects with a simple one-click timer. View
+                  detailed reports and analyze where your time goes.
+                </p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <div className="bg-blue-100 p-3 rounded-full w-fit mb-4">
+                  <FileSpreadsheet className="h-6 w-6 text-blue-600" />
+                </div>
+                <h3 className="text-xl font-bold mb-2">Invoice & Billing</h3>
+                <p className="text-gray-600">
+                  Create professional invoices automatically based on tracked
+                  time and expenses. Get paid faster with online payments.
+                </p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <div className="bg-blue-100 p-3 rounded-full w-fit mb-4">
+                  <BarChart3 className="h-6 w-6 text-blue-600" />
+                </div>
+                <h3 className="text-xl font-bold mb-2">Reports & Analytics</h3>
+                <p className="text-gray-600">
+                  Gain insights into your business with detailed reports. Track
+                  profitability and manage your time more effectively.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-16">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-3xl font-bold mb-6">Ready to get started?</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+              Join thousands of freelancers and small businesses who trust
+              TimeTrack for their time tracking and invoicing needs.
+            </p>
+            <Link
+              href="/register"
+              className="bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 inline-flex items-center gap-2"
+            >
+              Start your free trial
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <footer className="border-t py-12">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="flex items-center gap-2 mb-4 md:mb-0">
+              <Clock className="h-5 w-5 text-blue-600" />
+              <span className="font-bold">TimeTrack</span>
+            </div>
+            <div className="flex gap-6">
+              <Link
+                href="/privacy"
+                className="text-sm text-gray-600 hover:text-blue-600"
+              >
+                Privacy
+              </Link>
+              <Link
+                href="/terms"
+                className="text-sm text-gray-600 hover:text-blue-600"
+              >
+                Terms
+              </Link>
+              <Link
+                href="/contact"
+                className="text-sm text-gray-600 hover:text-blue-600"
+              >
+                Contact
+              </Link>
+            </div>
+          </div>
+          <div className="mt-8 text-center text-sm text-gray-600">
+            © {new Date().getFullYear()} TimeTrack. All rights reserved.
+          </div>
+        </div>
       </footer>
     </div>
   );
