@@ -1,19 +1,13 @@
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import { ClientForm } from "@/components/forms/ClientForm";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
+import { ClientForm } from '@/components/forms/ClientForm';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default async function NewClientPage() {
   const session = await getServerSession();
 
   if (!session?.user) {
-    return redirect("/login");
+    return redirect('/login');
   }
 
   return (
@@ -23,9 +17,7 @@ export default async function NewClientPage() {
       <Card>
         <CardHeader>
           <CardTitle>Client Information</CardTitle>
-          <CardDescription>
-            Add a new client to start tracking projects and time.
-          </CardDescription>
+          <CardDescription>Add a new client to start tracking projects and time.</CardDescription>
         </CardHeader>
         <CardContent>
           <ClientForm />

@@ -1,18 +1,11 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useSession, signOut } from "next-auth/react";
-import Link from "next/link";
-import {
-  User,
-  LogOut,
-  Settings,
-  ChevronDown,
-  PlayCircle,
-  PauseCircle,
-} from "lucide-react";
-import { NotificationDropdown } from "./NotificationDropdown";
-import { ModeToggle } from "./mode-toggle";
+import { useState } from 'react';
+import { useSession, signOut } from 'next-auth/react';
+import Link from 'next/link';
+import { User, LogOut, Settings, ChevronDown, PlayCircle, PauseCircle } from 'lucide-react';
+import { NotificationDropdown } from './NotificationDropdown';
+import { ModeToggle } from './mode-toggle';
 
 export default function DashboardHeader() {
   const { data: session } = useSession();
@@ -28,7 +21,7 @@ export default function DashboardHeader() {
   };
 
   const handleSignOut = async () => {
-    await signOut({ callbackUrl: "/" });
+    await signOut({ callbackUrl: '/' });
   };
 
   return (
@@ -39,8 +32,8 @@ export default function DashboardHeader() {
           onClick={toggleTimer}
           className={`flex items-center gap-2 py-1.5 px-3 rounded-md ${
             isTimerRunning
-              ? "text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
-              : "text-green-600 hover:bg-green-50 dark:hover:bg-green-950"
+              ? 'text-red-600 hover:bg-red-50 dark:hover:bg-red-950'
+              : 'text-green-600 hover:bg-green-50 dark:hover:bg-green-950'
           }`}
         >
           {isTimerRunning ? (
@@ -75,7 +68,7 @@ export default function DashboardHeader() {
               {session?.user?.name?.[0] || <User size={16} />}
             </div>
             <span className="text-sm font-medium hidden sm:inline-block">
-              {session?.user?.name || "User"}
+              {session?.user?.name || 'User'}
             </span>
             <ChevronDown size={16} />
           </button>
@@ -84,9 +77,7 @@ export default function DashboardHeader() {
             <div className="absolute right-0 mt-2 w-56 bg-background rounded-md shadow-lg z-10 border">
               <div className="p-3 border-b">
                 <p className="font-medium text-sm">{session?.user?.name}</p>
-                <p className="text-xs text-muted-foreground truncate">
-                  {session?.user?.email}
-                </p>
+                <p className="text-xs text-muted-foreground truncate">{session?.user?.email}</p>
               </div>
               <ul className="py-1">
                 <li>

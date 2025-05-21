@@ -1,4 +1,4 @@
-import { UserRole } from "@/types";
+import { UserRole } from '@/types';
 
 // Type for defining role-based permissions
 type ResourcePermissions = {
@@ -35,12 +35,7 @@ const resourcePermissions: Record<string, ResourcePermissions> = {
     delete: [UserRole.SUPER_ADMIN, UserRole.ADMIN],
   },
   invoices: {
-    view: [
-      UserRole.SUPER_ADMIN,
-      UserRole.ADMIN,
-      UserRole.ACCOUNTS,
-      UserRole.SALES,
-    ],
+    view: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.ACCOUNTS, UserRole.SALES],
     create: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.ACCOUNTS],
     edit: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.ACCOUNTS],
     delete: [UserRole.SUPER_ADMIN, UserRole.ADMIN],
@@ -65,12 +60,7 @@ const resourcePermissions: Record<string, ResourcePermissions> = {
       UserRole.SALES,
       UserRole.EMPLOYEE,
     ],
-    create: [
-      UserRole.SUPER_ADMIN,
-      UserRole.ADMIN,
-      UserRole.SALES,
-      UserRole.EMPLOYEE,
-    ],
+    create: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.SALES, UserRole.EMPLOYEE],
     edit: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE],
     delete: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.EMPLOYEE],
   },
@@ -82,104 +72,81 @@ const resourcePermissions: Record<string, ResourcePermissions> = {
       UserRole.SALES,
       UserRole.EMPLOYEE,
     ],
-    create: [
-      UserRole.SUPER_ADMIN,
-      UserRole.ADMIN,
-      UserRole.ACCOUNTS,
-      UserRole.EMPLOYEE,
-    ],
-    edit: [
-      UserRole.SUPER_ADMIN,
-      UserRole.ADMIN,
-      UserRole.ACCOUNTS,
-      UserRole.EMPLOYEE,
-    ],
+    create: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.ACCOUNTS, UserRole.EMPLOYEE],
+    edit: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.ACCOUNTS, UserRole.EMPLOYEE],
     delete: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.ACCOUNTS],
   },
 };
 
 // Routes access configuration
 export const routeAccess: Record<string, UserRole[]> = {
-  "/dashboard": [
+  '/dashboard': [
     UserRole.SUPER_ADMIN,
     UserRole.ADMIN,
     UserRole.ACCOUNTS,
     UserRole.SALES,
     UserRole.EMPLOYEE,
   ],
-  "/dashboard/time": [
+  '/dashboard/time': [
     UserRole.SUPER_ADMIN,
     UserRole.ADMIN,
     UserRole.ACCOUNTS,
     UserRole.SALES,
     UserRole.EMPLOYEE,
   ],
-  "/dashboard/clients": [
+  '/dashboard/clients': [
     UserRole.SUPER_ADMIN,
     UserRole.ADMIN,
     UserRole.ACCOUNTS,
     UserRole.SALES,
     UserRole.EMPLOYEE,
   ],
-  "/dashboard/projects": [
+  '/dashboard/projects': [
     UserRole.SUPER_ADMIN,
     UserRole.ADMIN,
     UserRole.ACCOUNTS,
     UserRole.SALES,
     UserRole.EMPLOYEE,
   ],
-  "/dashboard/invoices": [
-    UserRole.SUPER_ADMIN,
-    UserRole.ADMIN,
-    UserRole.ACCOUNTS,
-    UserRole.SALES,
-  ],
-  "/dashboard/expenses": [
+  '/dashboard/invoices': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.ACCOUNTS, UserRole.SALES],
+  '/dashboard/expenses': [
     UserRole.SUPER_ADMIN,
     UserRole.ADMIN,
     UserRole.ACCOUNTS,
     UserRole.SALES,
     UserRole.EMPLOYEE,
   ],
-  "/dashboard/activity": [
+  '/dashboard/activity': [
     UserRole.SUPER_ADMIN,
     UserRole.ADMIN,
     UserRole.ACCOUNTS,
     UserRole.SALES,
     UserRole.EMPLOYEE,
   ],
-  "/dashboard/reports/revenue": [
-    UserRole.SUPER_ADMIN,
-    UserRole.ADMIN,
-    UserRole.ACCOUNTS,
-  ],
-  "/dashboard/reports": [
-    UserRole.SUPER_ADMIN,
-    UserRole.ADMIN,
-    UserRole.ACCOUNTS,
-  ],
-  "/dashboard/settings": [
+  '/dashboard/reports/revenue': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.ACCOUNTS],
+  '/dashboard/reports': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.ACCOUNTS],
+  '/dashboard/settings': [
     UserRole.SUPER_ADMIN,
     UserRole.ADMIN,
     UserRole.ACCOUNTS,
     UserRole.SALES,
     UserRole.EMPLOYEE,
   ],
-  "/dashboard/profile": [
+  '/dashboard/profile': [
     UserRole.SUPER_ADMIN,
     UserRole.ADMIN,
     UserRole.ACCOUNTS,
     UserRole.SALES,
     UserRole.EMPLOYEE,
   ],
-  "/dashboard/notifications": [
+  '/dashboard/notifications': [
     UserRole.SUPER_ADMIN,
     UserRole.ADMIN,
     UserRole.ACCOUNTS,
     UserRole.SALES,
     UserRole.EMPLOYEE,
   ],
-  "/dashboard/admin": [UserRole.SUPER_ADMIN, UserRole.ADMIN],
+  '/dashboard/admin': [UserRole.SUPER_ADMIN, UserRole.ADMIN],
 };
 
 /**
@@ -219,5 +186,5 @@ export function hasRouteAccess(route: string, userRole: UserRole): boolean {
  * Get filtered navigation items based on user role
  */
 export function getAuthorizedNavItems(items: any[], userRole: UserRole): any[] {
-  return items.filter((item) => hasRouteAccess(item.href, userRole));
+  return items.filter(item => hasRouteAccess(item.href, userRole));
 }

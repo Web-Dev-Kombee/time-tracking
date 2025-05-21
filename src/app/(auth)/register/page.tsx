@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { UserSchema } from "@/types/schemas";
-import { z } from "zod";
-import { Clock, Loader2, Eye, EyeOff } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { UserSchema } from '@/types/schemas';
+import { z } from 'zod';
+import { Clock, Loader2, Eye, EyeOff } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -18,17 +18,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+} from '@/components/ui/form';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 
 const RegisterSchema = UserSchema.extend({
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
   confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
+}).refine(data => data.password === data.confirmPassword, {
   message: "Passwords don't match",
-  path: ["confirmPassword"],
+  path: ['confirmPassword'],
 });
 
 type RegisterFormData = z.infer<typeof RegisterSchema>;
@@ -43,10 +43,10 @@ export default function RegisterPage() {
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
     },
   });
 
@@ -55,10 +55,10 @@ export default function RegisterPage() {
     setError(null);
 
     try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           name: data.name,
@@ -70,13 +70,13 @@ export default function RegisterPage() {
       const result = await response.json();
 
       if (!response.ok) {
-        setError(result.error || "Failed to register");
+        setError(result.error || 'Failed to register');
         setIsLoading(false);
         return;
       }
 
       // Auto-login after successful registration
-      const signInResult = await signIn("credentials", {
+      const signInResult = await signIn('credentials', {
         email: data.email,
         password: data.password,
         redirect: false,
@@ -88,10 +88,10 @@ export default function RegisterPage() {
         return;
       }
 
-      router.push("/dashboard");
+      router.push('/dashboard');
       router.refresh();
     } catch (error) {
-      setError("Something went wrong. Please try again.");
+      setError('Something went wrong. Please try again.');
       setIsLoading(false);
     }
   };
@@ -101,9 +101,9 @@ export default function RegisterPage() {
     setError(null);
 
     try {
-      await signIn("google", { callbackUrl: "/dashboard" });
+      await signIn('google', { callbackUrl: '/dashboard' });
     } catch (error) {
-      setError("Failed to sign in with Google");
+      setError('Failed to sign in with Google');
       setIsLoading(false);
     }
   };
@@ -118,9 +118,7 @@ export default function RegisterPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl font-bold text-center">
-              Create an account
-            </CardTitle>
+            <CardTitle className="text-2xl font-bold text-center">Create an account</CardTitle>
           </CardHeader>
           <CardContent>
             {error && (
@@ -130,10 +128,7 @@ export default function RegisterPage() {
             )}
 
             <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4"
-              >
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
                   control={form.control}
                   name="name"
@@ -155,11 +150,7 @@ export default function RegisterPage() {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Enter your email"
-                          type="email"
-                          {...field}
-                        />
+                        <Input placeholder="Enter your email" type="email" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -176,7 +167,7 @@ export default function RegisterPage() {
                         <div className="relative">
                           <Input
                             placeholder="Create a password"
-                            type={showPassword ? "text" : "password"}
+                            type={showPassword ? 'text' : 'password'}
                             {...field}
                           />
                           <button
@@ -208,14 +199,12 @@ export default function RegisterPage() {
                         <div className="relative">
                           <Input
                             placeholder="Confirm your password"
-                            type={showConfirmPassword ? "text" : "password"}
+                            type={showConfirmPassword ? 'text' : 'password'}
                             {...field}
                           />
                           <button
                             type="button"
-                            onClick={() =>
-                              setShowConfirmPassword(!showConfirmPassword)
-                            }
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                             className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
                             tabIndex={-1}
                           >
@@ -232,14 +221,8 @@ export default function RegisterPage() {
                   )}
                 />
 
-                <Button
-                  type="submit"
-                  className="w-full mt-2"
-                  disabled={isLoading}
-                >
-                  {isLoading && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  )}
+                <Button type="submit" className="w-full mt-2" disabled={isLoading}>
+                  {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Sign up
                 </Button>
               </form>
@@ -250,9 +233,7 @@ export default function RegisterPage() {
                 <Separator className="w-full" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-card text-muted-foreground">
-                  Or continue with
-                </span>
+                <span className="px-2 bg-card text-muted-foreground">Or continue with</span>
               </div>
             </div>
 
@@ -291,7 +272,7 @@ export default function RegisterPage() {
         </Card>
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
-          Already have an account?{" "}
+          Already have an account?{' '}
           <Link href="/login" className="text-primary hover:underline">
             Log in
           </Link>

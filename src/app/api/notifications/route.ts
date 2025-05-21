@@ -1,7 +1,7 @@
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { authOptions } from "@/lib/auth";
+import { getServerSession } from 'next-auth';
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { authOptions } from '@/lib/auth';
 
 // GET notifications for the current user
 export async function GET() {
@@ -9,7 +9,7 @@ export async function GET() {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Get upcoming due invoices (due within 7 days)
@@ -22,7 +22,7 @@ export async function GET() {
       where: {
         userId: session.user.id,
         status: {
-          in: ["SENT"],
+          in: ['SENT'],
         },
         dueDate: {
           gte: today,
@@ -33,7 +33,7 @@ export async function GET() {
         client: true,
       },
       orderBy: {
-        dueDate: "asc",
+        dueDate: 'asc',
       },
     });
 
@@ -42,7 +42,7 @@ export async function GET() {
       where: {
         userId: session.user.id,
         status: {
-          in: ["SENT", "OVERDUE"],
+          in: ['SENT', 'OVERDUE'],
         },
         dueDate: {
           lt: today,
@@ -52,7 +52,7 @@ export async function GET() {
         client: true,
       },
       orderBy: {
-        dueDate: "asc",
+        dueDate: 'asc',
       },
     });
 
@@ -92,22 +92,21 @@ export async function GET() {
         },
       },
       orderBy: {
-        createdAt: "desc",
+        createdAt: 'desc',
       },
     });
 
     // Build notifications array
     const notifications = [
       // Overdue invoices notifications
-      ...overdueInvoices.map((invoice) => ({
+      ...overdueInvoices.map(invoice => ({
         id: `overdue-${invoice.id}`,
-        type: "overdue_invoice",
-        title: "Overdue Invoice",
+        type: 'overdue_invoice',
+        title: 'Overdue Invoice',
         message: `Invoice ${invoice.invoiceNumber} for ${
           invoice.client.name
         } is overdue by ${Math.ceil(
-          (today.getTime() - new Date(invoice.dueDate).getTime()) /
-            (1000 * 60 * 60 * 24)
+          (today.getTime() - new Date(invoice.dueDate).getTime()) / (1000 * 60 * 60 * 24)
         )} days.`,
         invoiceId: invoice.id,
         clientId: invoice.clientId,
@@ -117,15 +116,12 @@ export async function GET() {
       })),
 
       // Upcoming due invoices notifications
-      ...upcomingInvoices.map((invoice) => ({
+      ...upcomingInvoices.map(invoice => ({
         id: `upcoming-${invoice.id}`,
-        type: "upcoming_invoice",
-        title: "Upcoming Invoice Due",
-        message: `Invoice ${invoice.invoiceNumber} for ${
-          invoice.client.name
-        } is due in ${Math.ceil(
-          (new Date(invoice.dueDate).getTime() - today.getTime()) /
-            (1000 * 60 * 60 * 24)
+        type: 'upcoming_invoice',
+        title: 'Upcoming Invoice Due',
+        message: `Invoice ${invoice.invoiceNumber} for ${invoice.client.name} is due in ${Math.ceil(
+          (new Date(invoice.dueDate).getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
         )} days.`,
         invoiceId: invoice.id,
         clientId: invoice.clientId,
@@ -135,15 +131,14 @@ export async function GET() {
       })),
 
       // Running time entries notifications
-      ...runningTimeEntries.map((entry) => ({
+      ...runningTimeEntries.map(entry => ({
         id: `running-${entry.id}`,
-        type: "running_timer",
-        title: "Timer Running",
+        type: 'running_timer',
+        title: 'Timer Running',
         message: `You have a timer running for ${entry.project.name} (${
           entry.project.client.name
         }) for ${Math.floor(
-          (today.getTime() - new Date(entry.startTime).getTime()) /
-            (1000 * 60 * 60)
+          (today.getTime() - new Date(entry.startTime).getTime()) / (1000 * 60 * 60)
         )} hours.`,
         timeEntryId: entry.id,
         projectId: entry.projectId,
@@ -153,10 +148,10 @@ export async function GET() {
       })),
 
       // Recent payments notifications
-      ...recentPayments.map((payment) => ({
+      ...recentPayments.map(payment => ({
         id: `payment-${payment.id}`,
-        type: "payment_received",
-        title: "Payment Received",
+        type: 'payment_received',
+        title: 'Payment Received',
         message: `Payment of $${payment.amount.toFixed(
           2
         )} received for invoice ${payment.invoice.invoiceNumber} from ${
@@ -169,10 +164,7 @@ export async function GET() {
         createdAt: payment.createdAt,
         read: false,
       })),
-    ].sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
+    ].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     return NextResponse.json({
       notifications,
@@ -185,11 +177,8 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error("Error fetching notifications:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch notifications" },
-      { status: 500 }
-    );
+    console.error('Error fetching notifications:', error);
+    return NextResponse.json({ error: 'Failed to fetch notifications' }, { status: 500 });
   }
 }
 
@@ -200,34 +189,28 @@ export async function POST(request: Request) {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const json = await request.json();
     const { notificationIds, action } = json;
 
     if (!notificationIds || !Array.isArray(notificationIds) || !action) {
-      return NextResponse.json(
-        { error: "Invalid request format" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid request format' }, { status: 400 });
     }
 
     // If we were storing notifications in the database, we would mark them as read here
     // For now, just return success
-    if (action === "markAsRead") {
+    if (action === 'markAsRead') {
       return NextResponse.json({
         success: true,
         message: `${notificationIds.length} notifications marked as read`,
       });
     }
 
-    return NextResponse.json({ error: "Invalid action" }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
   } catch (error) {
-    console.error("Error updating notifications:", error);
-    return NextResponse.json(
-      { error: "Failed to update notifications" },
-      { status: 500 }
-    );
+    console.error('Error updating notifications:', error);
+    return NextResponse.json({ error: 'Failed to update notifications' }, { status: 500 });
   }
 }

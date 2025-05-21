@@ -1,8 +1,8 @@
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { ExpenseSchema } from "@/types/schemas";
-import { authOptions } from "@/lib/auth";
+import { getServerSession } from 'next-auth';
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { ExpenseSchema } from '@/types/schemas';
+import { authOptions } from '@/lib/auth';
 
 // GET all expenses
 export async function GET(request: Request) {
@@ -10,15 +10,15 @@ export async function GET(request: Request) {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Get query parameters
     const { searchParams } = new URL(request.url);
-    const projectId = searchParams.get("projectId");
-    const startDate = searchParams.get("startDate");
-    const endDate = searchParams.get("endDate");
-    const billable = searchParams.get("billable");
+    const projectId = searchParams.get('projectId');
+    const startDate = searchParams.get('startDate');
+    const endDate = searchParams.get('endDate');
+    const billable = searchParams.get('billable');
 
     // Build filter conditions
     const where: any = {
@@ -42,7 +42,7 @@ export async function GET(request: Request) {
     }
 
     if (billable !== null) {
-      where.billable = billable === "true";
+      where.billable = billable === 'true';
     }
 
     const expenses = await prisma.expense.findMany({
@@ -55,17 +55,14 @@ export async function GET(request: Request) {
         },
       },
       orderBy: {
-        date: "desc",
+        date: 'desc',
       },
     });
 
     return NextResponse.json(expenses);
   } catch (error) {
-    console.error("Error fetching expenses:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch expenses" },
-      { status: 500 }
-    );
+    console.error('Error fetching expenses:', error);
+    return NextResponse.json({ error: 'Failed to fetch expenses' }, { status: 500 });
   }
 }
 
@@ -75,7 +72,7 @@ export async function POST(request: Request) {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const json = await request.json();
@@ -102,17 +99,14 @@ export async function POST(request: Request) {
 
     return NextResponse.json(expense, { status: 201 });
   } catch (error: any) {
-    if (error.name === "ZodError") {
+    if (error.name === 'ZodError') {
       return NextResponse.json(
-        { error: "Invalid expense data", details: error.errors },
+        { error: 'Invalid expense data', details: error.errors },
         { status: 400 }
       );
     }
 
-    console.error("Error creating expense:", error);
-    return NextResponse.json(
-      { error: "Failed to create expense" },
-      { status: 500 }
-    );
+    console.error('Error creating expense:', error);
+    return NextResponse.json({ error: 'Failed to create expense' }, { status: 500 });
   }
 }

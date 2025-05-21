@@ -1,20 +1,20 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { redirect } from "next/navigation";
-import Image from "next/image";
-import ProfileForm from "@/components/profile/ProfileForm";
-import PasswordUpdateForm from "@/components/profile/PasswordUpdateForm";
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+import Image from 'next/image';
+import ProfileForm from '@/components/profile/ProfileForm';
+import PasswordUpdateForm from '@/components/profile/PasswordUpdateForm';
 
 export const metadata = {
-  title: "Profile | TimeTrack",
-  description: "Manage your profile settings",
+  title: 'Profile | TimeTrack',
+  description: 'Manage your profile settings',
 };
 
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions);
 
   if (!session?.user) {
-    redirect("/login");
+    redirect('/login');
   }
 
   return (
@@ -48,19 +48,16 @@ export default async function ProfilePage() {
                   />
                 ) : (
                   <div className="flex items-center justify-center w-full h-full bg-blue-50 text-blue-500 text-xl font-bold">
-                    {session?.user.name?.charAt(0) ||
-                      session?.user.email.charAt(0)}
+                    {session?.user.name?.charAt(0) || session?.user.email.charAt(0)}
                   </div>
                 )}
               </div>
 
               <div className="text-center">
-                <h3 className="font-medium text-gray-800">
-                  {session?.user.name}
-                </h3>
+                <h3 className="font-medium text-gray-800">{session?.user.name}</h3>
                 <p className="text-gray-500 text-sm">{session?.user.email}</p>
                 <p className="mt-1 text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded-full inline-block">
-                  {session?.user.role.toLowerCase().replace("_", " ")}
+                  {session?.user.role.toLowerCase().replace('_', ' ')}
                 </p>
               </div>
 
@@ -77,15 +74,11 @@ export default async function ProfilePage() {
             <h2 className="text-xl font-semibold mb-4">Account Information</h2>
             <div className="space-y-4">
               <div>
-                <p className="text-sm font-medium text-gray-500">
-                  Subscription
-                </p>
+                <p className="text-sm font-medium text-gray-500">Subscription</p>
                 <p>{session?.user.subscription}</p>
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-500">
-                  Member Since
-                </p>
+                <p className="text-sm font-medium text-gray-500">Member Since</p>
                 <p>N/A</p>
               </div>
               <div>

@@ -1,11 +1,11 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import bcrypt from "bcrypt";
-import { UserSchema } from "@/types/schemas";
-import { z } from "zod";
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import bcrypt from 'bcrypt';
+import { UserSchema } from '@/types/schemas';
+import { z } from 'zod';
 
 const RegisterSchema = UserSchema.extend({
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
 });
 
 export async function POST(request: Request) {
@@ -21,10 +21,7 @@ export async function POST(request: Request) {
     });
 
     if (existingUser) {
-      return NextResponse.json(
-        { error: "User with this email already exists" },
-        { status: 409 }
-      );
+      return NextResponse.json({ error: 'User with this email already exists' }, { status: 409 });
     }
 
     // Hash password
@@ -43,22 +40,19 @@ export async function POST(request: Request) {
     const { password, ...userWithoutPassword } = user;
 
     return NextResponse.json(
-      { message: "User registered successfully", user: userWithoutPassword },
+      { message: 'User registered successfully', user: userWithoutPassword },
       { status: 201 }
     );
   } catch (error) {
-    console.error("Registration error:", error);
+    console.error('Registration error:', error);
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Invalid input data", details: error.errors },
+        { error: 'Invalid input data', details: error.errors },
         { status: 400 }
       );
     }
 
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

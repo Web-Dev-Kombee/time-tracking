@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./auth";
-import { UserRole } from "@/types";
+import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from './auth';
+import { UserRole } from '@/types';
 
 /**
  * Validates if the current session user has one of the required roles
@@ -25,10 +25,7 @@ export async function validateUserRole(requiredRoles: UserRole[]) {
   if (!session?.user) {
     return {
       session: null,
-      response: NextResponse.json(
-        { error: "Unauthorized: Not authenticated" },
-        { status: 401 }
-      ),
+      response: NextResponse.json({ error: 'Unauthorized: Not authenticated' }, { status: 401 }),
     };
   }
 
@@ -38,7 +35,7 @@ export async function validateUserRole(requiredRoles: UserRole[]) {
     return {
       session: null,
       response: NextResponse.json(
-        { error: "Forbidden: Insufficient permissions" },
+        { error: 'Forbidden: Insufficient permissions' },
         { status: 403 }
       ),
     };
@@ -51,10 +48,7 @@ export async function validateUserRole(requiredRoles: UserRole[]) {
  * Check if the current user can modify a resource created by the given user ID
  * Only allows SUPER_ADMIN, ADMIN or the original creator
  */
-export function canModifyResource(
-  session: any,
-  resourceCreatorId: string
-): boolean {
+export function canModifyResource(session: any, resourceCreatorId: string): boolean {
   if (!session?.user) return false;
 
   const userRole = session.user.role as UserRole;

@@ -1,13 +1,13 @@
-import { prisma } from "@/lib/prisma";
-import bcrypt from "bcrypt";
-import { NextResponse } from "next/server";
+import { prisma } from '@/lib/prisma';
+import bcrypt from 'bcrypt';
+import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
     // Admin credentials
-    const adminEmail = "admin@timetrack.com";
-    const adminPassword = "Admin123!";
-    const adminName = "Admin User";
+    const adminEmail = 'admin@timetrack.com';
+    const adminPassword = 'Admin123!';
+    const adminName = 'Admin User';
 
     // Check if admin user already exists
     const existingAdmin = await prisma.user.findUnique({
@@ -18,7 +18,7 @@ export async function GET() {
 
     if (existingAdmin) {
       return NextResponse.json(
-        { message: "Admin user already exists", userId: existingAdmin.id },
+        { message: 'Admin user already exists', userId: existingAdmin.id },
         { status: 200 }
       );
     }
@@ -32,7 +32,7 @@ export async function GET() {
         name: adminName,
         email: adminEmail,
         password: hashedPassword,
-        role: "ADMIN",
+        role: 'ADMIN',
       },
     });
 
@@ -40,7 +40,7 @@ export async function GET() {
     const { password, ...userWithoutPassword } = user;
     return NextResponse.json(
       {
-        message: "Admin user created successfully",
+        message: 'Admin user created successfully',
         user: userWithoutPassword,
         credentials: {
           email: adminEmail,
@@ -50,11 +50,8 @@ export async function GET() {
       { status: 201 }
     );
   } catch (error) {
-    console.error("Error creating admin user:", error);
-    return NextResponse.json(
-      { error: "Failed to create admin user" },
-      { status: 500 }
-    );
+    console.error('Error creating admin user:', error);
+    return NextResponse.json({ error: 'Failed to create admin user' }, { status: 500 });
   }
 }
 
@@ -62,9 +59,9 @@ export async function GET() {
 export async function POST() {
   try {
     // Super Admin credentials
-    const adminEmail = "superadmin@timetrack.com";
-    const adminPassword = "SuperAdmin123!";
-    const adminName = "Super Admin";
+    const adminEmail = 'superadmin@timetrack.com';
+    const adminPassword = 'SuperAdmin123!';
+    const adminName = 'Super Admin';
 
     // Check if super admin user already exists
     const existingAdmin = await prisma.user.findUnique({
@@ -76,7 +73,7 @@ export async function POST() {
     if (existingAdmin) {
       return NextResponse.json(
         {
-          message: "Super Admin user already exists",
+          message: 'Super Admin user already exists',
           userId: existingAdmin.id,
         },
         { status: 200 }
@@ -92,7 +89,7 @@ export async function POST() {
         name: adminName,
         email: adminEmail,
         password: hashedPassword,
-        role: "SUPER_ADMIN",
+        role: 'SUPER_ADMIN',
       },
     });
 
@@ -100,7 +97,7 @@ export async function POST() {
     const { password, ...userWithoutPassword } = user;
     return NextResponse.json(
       {
-        message: "Super Admin user created successfully",
+        message: 'Super Admin user created successfully',
         user: userWithoutPassword,
         credentials: {
           email: adminEmail,
@@ -110,10 +107,7 @@ export async function POST() {
       { status: 201 }
     );
   } catch (error) {
-    console.error("Error creating super admin user:", error);
-    return NextResponse.json(
-      { error: "Failed to create super admin user" },
-      { status: 500 }
-    );
+    console.error('Error creating super admin user:', error);
+    return NextResponse.json({ error: 'Failed to create super admin user' }, { status: 500 });
   }
 }

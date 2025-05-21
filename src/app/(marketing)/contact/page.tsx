@@ -1,49 +1,49 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, MapPin, Phone, Send } from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Mail, MapPin, Phone, Send } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
 
 export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Define the form schema with validation
   const formSchema = z.object({
-    name: z.string().min(2, "Name must be at least 2 characters"),
-    email: z.string().email("Invalid email address"),
-    subject: z.string().min(1, "Please select a subject"),
-    message: z.string().min(10, "Message must be at least 10 characters"),
+    name: z.string().min(2, 'Name must be at least 2 characters'),
+    email: z.string().email('Invalid email address'),
+    subject: z.string().min(1, 'Please select a subject'),
+    message: z.string().min(10, 'Message must be at least 10 characters'),
   });
 
   // Initialize the form
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      subject: "",
-      message: "",
+      name: '',
+      email: '',
+      subject: '',
+      message: '',
     },
   });
 
@@ -53,12 +53,12 @@ export default function ContactPage() {
 
     try {
       // This is a mock submission - in a real app, you'd call an API endpoint here
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
       toast.success("Message sent successfully! We'll get back to you soon.");
       form.reset();
     } catch (error) {
-      toast.error("Failed to send message. Please try again later.");
+      toast.error('Failed to send message. Please try again later.');
     } finally {
       setIsSubmitting(false);
     }
@@ -67,12 +67,10 @@ export default function ContactPage() {
   return (
     <div className="container max-w-6xl py-12 md:py-16 lg:py-24">
       <div className="text-center mb-12 md:mb-16">
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-          Get in Touch
-        </h1>
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">Get in Touch</h1>
         <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-          Have questions or need help? Contact our team and we'll get back to
-          you as soon as possible.
+          Have questions or need help? Contact our team and we'll get back to you as soon as
+          possible.
         </p>
       </div>
 
@@ -115,10 +113,7 @@ export default function ContactPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Subject</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a subject" />
@@ -126,16 +121,10 @@ export default function ContactPage() {
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="general">General Inquiry</SelectItem>
-                        <SelectItem value="support">
-                          Technical Support
-                        </SelectItem>
-                        <SelectItem value="billing">
-                          Billing Question
-                        </SelectItem>
+                        <SelectItem value="support">Technical Support</SelectItem>
+                        <SelectItem value="billing">Billing Question</SelectItem>
                         <SelectItem value="feedback">Feedback</SelectItem>
-                        <SelectItem value="enterprise">
-                          Enterprise Sales
-                        </SelectItem>
+                        <SelectItem value="enterprise">Enterprise Sales</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -150,11 +139,7 @@ export default function ContactPage() {
                   <FormItem>
                     <FormLabel>Message</FormLabel>
                     <FormControl>
-                      <Textarea
-                        placeholder="Your message"
-                        className="min-h-[160px]"
-                        {...field}
-                      />
+                      <Textarea placeholder="Your message" className="min-h-[160px]" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -242,16 +227,13 @@ export default function ContactPage() {
           <div>
             <h2 className="text-2xl font-bold mb-4">Support</h2>
             <p className="mb-4">
-              For faster support, please check our{" "}
+              For faster support, please check our{' '}
               <a href="#" className="text-primary hover:underline">
                 Help Center
-              </a>{" "}
+              </a>{' '}
               for answers to frequently asked questions.
             </p>
-            <p>
-              Existing customers can also access support directly through their
-              dashboard.
-            </p>
+            <p>Existing customers can also access support directly through their dashboard.</p>
           </div>
         </div>
       </div>

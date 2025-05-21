@@ -1,9 +1,9 @@
-import Link from "next/link";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
-import { Button } from "@/components/ui/button";
-import { PlusCircle, UserPlus, Building2, Mail, Phone } from "lucide-react";
+import Link from 'next/link';
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
+import { prisma } from '@/lib/prisma';
+import { Button } from '@/components/ui/button';
+import { PlusCircle, UserPlus, Building2, Mail, Phone } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -11,25 +11,19 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/table';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default async function ClientsPage() {
   const session = await getServerSession();
 
   if (!session?.user) {
-    return redirect("/login");
+    return redirect('/login');
   }
 
   const clients = await prisma.client.findMany({
     orderBy: {
-      createdAt: "desc",
+      createdAt: 'desc',
     },
     include: {
       projects: true,
@@ -69,9 +63,7 @@ export default async function ClientsPage() {
         <Card>
           <CardHeader>
             <CardTitle>All Clients</CardTitle>
-            <CardDescription>
-              Manage your clients and view their projects.
-            </CardDescription>
+            <CardDescription>Manage your clients and view their projects.</CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
@@ -84,7 +76,7 @@ export default async function ClientsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {clients.map((client) => (
+                {clients.map(client => (
                   <TableRow key={client.id}>
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-2">
@@ -109,9 +101,7 @@ export default async function ClientsPage() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className="text-sm font-medium">
-                        {client.projects.length} projects
-                      </span>
+                      <span className="text-sm font-medium">{client.projects.length} projects</span>
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">

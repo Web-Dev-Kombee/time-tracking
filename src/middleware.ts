@@ -1,36 +1,19 @@
-import { NextResponse } from "next/server";
-import { withAuth } from "next-auth/middleware";
-import { UserRole } from "./types";
+import { NextResponse } from 'next/server';
+import { withAuth } from 'next-auth/middleware';
+import { UserRole } from './types';
 
 // Routes configuration with required roles
 const routeRoleMap: Record<string, UserRole[]> = {
   // Admin-only routes
-  "/dashboard/admin": [UserRole.SUPER_ADMIN, UserRole.ADMIN],
+  '/dashboard/admin': [UserRole.SUPER_ADMIN, UserRole.ADMIN],
 
   // Financial routes (admin and accounts)
-  "/dashboard/reports/revenue": [
-    UserRole.SUPER_ADMIN,
-    UserRole.ADMIN,
-    UserRole.ACCOUNTS,
-  ],
-  "/dashboard/reports/financial": [
-    UserRole.SUPER_ADMIN,
-    UserRole.ADMIN,
-    UserRole.ACCOUNTS,
-  ],
-  "/dashboard/invoices": [
-    UserRole.SUPER_ADMIN,
-    UserRole.ADMIN,
-    UserRole.ACCOUNTS,
-    UserRole.SALES,
-  ],
+  '/dashboard/reports/revenue': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.ACCOUNTS],
+  '/dashboard/reports/financial': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.ACCOUNTS],
+  '/dashboard/invoices': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.ACCOUNTS, UserRole.SALES],
 
   // Reports routes
-  "/dashboard/reports": [
-    UserRole.SUPER_ADMIN,
-    UserRole.ADMIN,
-    UserRole.ACCOUNTS,
-  ],
+  '/dashboard/reports': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.ACCOUNTS],
 };
 
 // This function can be marked `async` if using `await` inside
@@ -40,7 +23,7 @@ export default withAuth(
 
     // No token means not authenticated
     if (!token) {
-      return NextResponse.redirect(new URL("/login", req.url));
+      return NextResponse.redirect(new URL('/login', req.url));
     }
 
     // Check if the current path matches any of our protected routes
@@ -52,7 +35,7 @@ export default withAuth(
         // If user doesn't have required role for this route
         if (!roles.includes(token.role as UserRole)) {
           // Redirect to dashboard
-          return NextResponse.redirect(new URL("/dashboard", req.url));
+          return NextResponse.redirect(new URL('/dashboard', req.url));
         }
       }
     }
@@ -70,7 +53,7 @@ export default withAuth(
 // Configure which paths should be protected by this middleware
 export const config = {
   matcher: [
-    "/dashboard/:path*",
-    "/api/((?!setup).*)", // Protect all API routes except /api/setup
+    '/dashboard/:path*',
+    '/api/((?!setup).*)', // Protect all API routes except /api/setup
   ],
 };

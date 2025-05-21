@@ -5,27 +5,23 @@ import {
   FileSpreadsheet,
   ArrowUpRight,
   BanknoteIcon,
-} from "lucide-react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import {
-  DASHBOARD_STATS,
-  RECENT_ACTIVITIES,
-  UPCOMING_INVOICES,
-} from "@/constants";
-import { cn } from "@/lib/utils";
+} from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { DASHBOARD_STATS, RECENT_ACTIVITIES, UPCOMING_INVOICES } from '@/constants';
+import { cn } from '@/lib/utils';
 
 export default function DashboardPage() {
   // Get the appropriate icon based on the icon name
   const getIcon = (iconName: string) => {
     switch (iconName) {
-      case "Clock":
+      case 'Clock':
         return <Clock className="h-6 w-6 text-blue-600" />;
-      case "FolderKanban":
+      case 'FolderKanban':
         return <FolderKanban className="h-6 w-6 text-purple-600" />;
-      case "FileSpreadsheet":
+      case 'FileSpreadsheet':
         return <FileSpreadsheet className="h-6 w-6 text-orange-600" />;
-      case "Users":
+      case 'Users':
         return <Users className="h-6 w-6 text-green-600" />;
       default:
         return <Clock className="h-6 w-6 text-blue-600" />;
@@ -46,20 +42,18 @@ export default function DashboardPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {DASHBOARD_STATS.map((stat) => (
+        {DASHBOARD_STATS.map(stat => (
           <Link
             key={stat.label}
             href={stat.href}
             className="bg-background p-6 rounded-lg shadow-sm border hover:shadow-md transition-shadow"
           >
             <div className="flex justify-between items-start">
-              <div className="bg-muted p-3 rounded-full">
-                {getIcon(stat.iconName)}
-              </div>
+              <div className="bg-muted p-3 rounded-full">{getIcon(stat.iconName)}</div>
               <span
                 className={cn(
-                  "text-sm font-medium",
-                  stat.positive ? "text-green-600" : "text-red-600"
+                  'text-sm font-medium',
+                  stat.positive ? 'text-green-600' : 'text-red-600'
                 )}
               >
                 {stat.change}
@@ -85,31 +79,21 @@ export default function DashboardPage() {
             </Link>
           </div>
           <div className="divide-y">
-            {RECENT_ACTIVITIES.map((activity) => (
+            {RECENT_ACTIVITIES.map(activity => (
               <div key={activity.id} className="p-4 hover:bg-muted/50">
                 <div className="flex justify-between">
                   <p className="text-sm">
-                    <span className="font-medium">{activity.action}</span>{" "}
+                    <span className="font-medium">{activity.action}</span>{' '}
                     <span className="text-primary">{activity.target}</span>
                     {activity.client && (
-                      <span className="text-muted-foreground">
-                        {" "}
-                        for {activity.client}
-                      </span>
+                      <span className="text-muted-foreground"> for {activity.client}</span>
                     )}
                     {activity.project && (
-                      <span className="text-muted-foreground">
-                        {" "}
-                        ({activity.project})
-                      </span>
+                      <span className="text-muted-foreground"> ({activity.project})</span>
                     )}
-                    {activity.amount && (
-                      <span className="font-medium"> - {activity.amount}</span>
-                    )}
+                    {activity.amount && <span className="font-medium"> - {activity.amount}</span>}
                   </p>
-                  <span className="text-xs text-muted-foreground">
-                    {activity.time}
-                  </span>
+                  <span className="text-xs text-muted-foreground">{activity.time}</span>
                 </div>
               </div>
             ))}
@@ -129,7 +113,7 @@ export default function DashboardPage() {
             </Link>
           </div>
           <div className="divide-y">
-            {UPCOMING_INVOICES.map((invoice) => (
+            {UPCOMING_INVOICES.map(invoice => (
               <div key={invoice.id} className="p-4 hover:bg-muted/50">
                 <div className="flex justify-between items-center">
                   <div>
@@ -138,10 +122,10 @@ export default function DashboardPage() {
                       <span className="text-xs">{invoice.id}</span>
                       <span
                         className={cn(
-                          "text-xs px-2 py-0.5 rounded-full",
-                          invoice.status === "overdue"
-                            ? "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300"
-                            : "bg-yellow-100 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-300"
+                          'text-xs px-2 py-0.5 rounded-full',
+                          invoice.status === 'overdue'
+                            ? 'bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300'
+                            : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-300'
                         )}
                       >
                         {invoice.due}
@@ -178,9 +162,7 @@ export default function DashboardPage() {
         <div className="h-64 flex items-center justify-center bg-gray-50 rounded-md border">
           <div className="text-center">
             <BanknoteIcon className="h-10 w-10 text-gray-400 mx-auto mb-2" />
-            <p className="text-sm text-gray-500">
-              Revenue chart coming soon...
-            </p>
+            <p className="text-sm text-gray-500">Revenue chart coming soon...</p>
           </div>
         </div>
       </div>

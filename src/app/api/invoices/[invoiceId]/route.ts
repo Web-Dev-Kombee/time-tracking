@@ -1,18 +1,15 @@
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { InvoiceSchema } from "@/types/schemas";
-import { authOptions } from "@/lib/auth";
+import { getServerSession } from 'next-auth';
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { InvoiceSchema } from '@/types/schemas';
+import { authOptions } from '@/lib/auth';
 
-export async function GET(
-  request: Request,
-  { params }: { params: { invoiceId: string } }
-) {
+export async function GET(request: Request, { params }: { params: { invoiceId: string } }) {
   try {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const invoice = await prisma.invoice.findUnique({
@@ -34,28 +31,22 @@ export async function GET(
     });
 
     if (!invoice) {
-      return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
     }
 
     return NextResponse.json(invoice);
   } catch (error) {
-    console.error("Error fetching invoice:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch invoice" },
-      { status: 500 }
-    );
+    console.error('Error fetching invoice:', error);
+    return NextResponse.json({ error: 'Failed to fetch invoice' }, { status: 500 });
   }
 }
 
-export async function PUT(
-  request: Request,
-  { params }: { params: { invoiceId: string } }
-) {
+export async function PUT(request: Request, { params }: { params: { invoiceId: string } }) {
   try {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const json = await request.json();
@@ -70,7 +61,7 @@ export async function PUT(
     });
 
     if (!existingInvoice) {
-      return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
     }
 
     // Calculate invoice totals
@@ -83,7 +74,7 @@ export async function PUT(
     const total = subtotal + tax;
 
     // Update invoice and items in a transaction
-    const updatedInvoice = await prisma.$transaction(async (tx) => {
+    const updatedInvoice = await prisma.$transaction(async tx => {
       // Delete existing items
       await tx.invoiceItem.deleteMany({
         where: {
@@ -106,7 +97,7 @@ export async function PUT(
           tax,
           total,
           items: {
-            create: validatedData.items.map((item) => ({
+            create: validatedData.items.map(item => ({
               description: item.description,
               quantity: item.quantity,
               unitPrice: item.unitPrice,
@@ -125,30 +116,24 @@ export async function PUT(
 
     return NextResponse.json(updatedInvoice);
   } catch (error: any) {
-    if (error.name === "ZodError") {
+    if (error.name === 'ZodError') {
       return NextResponse.json(
-        { error: "Invalid invoice data", details: error.errors },
+        { error: 'Invalid invoice data', details: error.errors },
         { status: 400 }
       );
     }
 
-    console.error("Error updating invoice:", error);
-    return NextResponse.json(
-      { error: "Failed to update invoice" },
-      { status: 500 }
-    );
+    console.error('Error updating invoice:', error);
+    return NextResponse.json({ error: 'Failed to update invoice' }, { status: 500 });
   }
 }
 
-export async function DELETE(
-  request: Request,
-  { params }: { params: { invoiceId: string } }
-) {
+export async function DELETE(request: Request, { params }: { params: { invoiceId: string } }) {
   try {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Check if invoice exists and belongs to user
@@ -160,7 +145,7 @@ export async function DELETE(
     });
 
     if (!existingInvoice) {
-      return NextResponse.json({ error: "Invoice not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
     }
 
     // Delete invoice (this will cascade delete items due to the relation)
@@ -172,10 +157,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error deleting invoice:", error);
-    return NextResponse.json(
-      { error: "Failed to delete invoice" },
-      { status: 500 }
-    );
+    console.error('Error deleting invoice:', error);
+    return NextResponse.json({ error: 'Failed to delete invoice' }, { status: 500 });
   }
 }

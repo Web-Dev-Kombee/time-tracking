@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { CheckCircle2, ArrowRight } from "lucide-react";
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { CheckCircle2, ArrowRight } from 'lucide-react';
 
 export default function HomePage() {
   return (
@@ -16,8 +16,8 @@ export default function HomePage() {
                 Grow Your Business
               </h1>
               <p className="text-xl text-muted-foreground mb-8 max-w-md">
-                Effortlessly track time, manage projects, create invoices, and
-                maximize productivity.
+                Effortlessly track time, manage projects, create invoices, and maximize
+                productivity.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Button size="lg" asChild>
@@ -29,9 +29,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="bg-muted rounded-lg p-4 h-[400px] flex items-center justify-center order-first lg:order-last">
-              <p className="text-center text-muted-foreground">
-                App dashboard mockup
-              </p>
+              <p className="text-center text-muted-foreground">App dashboard mockup</p>
             </div>
           </div>
         </div>
@@ -43,8 +41,7 @@ export default function HomePage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Powerful Features</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Everything you need to manage your time, projects, and billing in
-              one place.
+              Everything you need to manage your time, projects, and billing in one place.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -52,24 +49,21 @@ export default function HomePage() {
               <div className="mb-4 text-primary text-4xl">⏱️</div>
               <h3 className="text-xl font-bold mb-2">Time Tracking</h3>
               <p className="text-muted-foreground">
-                Track time with a single click. Add notes, tags, and categorize
-                your work.
+                Track time with a single click. Add notes, tags, and categorize your work.
               </p>
             </div>
             <div className="border rounded-lg p-6">
               <div className="mb-4 text-primary text-4xl">📋</div>
               <h3 className="text-xl font-bold mb-2">Project Management</h3>
               <p className="text-muted-foreground">
-                Create projects, set budgets, track deadlines and monitor
-                progress.
+                Create projects, set budgets, track deadlines and monitor progress.
               </p>
             </div>
             <div className="border rounded-lg p-6">
               <div className="mb-4 text-primary text-4xl">💰</div>
               <h3 className="text-xl font-bold mb-2">Invoicing</h3>
               <p className="text-muted-foreground">
-                Generate professional invoices based on tracked time and
-                expenses.
+                Generate professional invoices based on tracked time and expenses.
               </p>
             </div>
           </div>
@@ -87,34 +81,27 @@ export default function HomePage() {
       <section className="py-16 md:py-24 bg-muted">
         <div className="container mx-auto max-w-6xl px-4 md:px-6">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">
-              Trusted by Professionals
-            </h2>
+            <h2 className="text-3xl font-bold mb-4">Trusted by Professionals</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Join thousands of freelancers and businesses who use TimeTracker
-              every day.
+              Join thousands of freelancers and businesses who use TimeTracker every day.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-card rounded-lg p-6">
               <p className="mb-4">
-                "TimeTracker has transformed how I manage my client work.
-                Billing is now a breeze!"
+                "TimeTracker has transformed how I manage my client work. Billing is now a breeze!"
               </p>
               <div className="flex items-center">
                 <div className="w-10 h-10 rounded-full bg-primary/10 mr-3"></div>
                 <div>
                   <p className="font-medium">Sarah Johnson</p>
-                  <p className="text-sm text-muted-foreground">
-                    Freelance Designer
-                  </p>
+                  <p className="text-sm text-muted-foreground">Freelance Designer</p>
                 </div>
               </div>
             </div>
             <div className="bg-card rounded-lg p-6">
               <p className="mb-4">
-                "We've increased our billing accuracy by 32% since switching to
-                TimeTracker."
+                "We've increased our billing accuracy by 32% since switching to TimeTracker."
               </p>
               <div className="flex items-center">
                 <div className="w-10 h-10 rounded-full bg-primary/10 mr-3"></div>
@@ -126,16 +113,13 @@ export default function HomePage() {
             </div>
             <div className="bg-card rounded-lg p-6">
               <p className="mb-4">
-                "The reporting features help me understand where my team's time
-                is going."
+                "The reporting features help me understand where my team's time is going."
               </p>
               <div className="flex items-center">
                 <div className="w-10 h-10 rounded-full bg-primary/10 mr-3"></div>
                 <div>
                   <p className="font-medium">Maria Rodriguez</p>
-                  <p className="text-sm text-muted-foreground">
-                    Project Manager
-                  </p>
+                  <p className="text-sm text-muted-foreground">Project Manager</p>
                 </div>
               </div>
             </div>
@@ -149,8 +133,7 @@ export default function HomePage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Choose the right plan for your business and start your 14-day free
-              trial today.
+              Choose the right plan for your business and start your 14-day free trial today.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
@@ -236,18 +219,14 @@ export default function HomePage() {
                 </li>
               </ul>
               <Button className="w-full" variant="outline" asChild>
-                <Link href="/api/auth/signup?plan=business">
-                  Start free trial
-                </Link>
+                <Link href="/api/auth/signup?plan=business">Start free trial</Link>
               </Button>
             </div>
           </div>
           <div className="text-center">
             <p className="text-muted-foreground mb-4">Need a custom plan?</p>
             <Button variant="link" asChild>
-              <Link href="/contact?type=enterprise">
-                Contact us for enterprise pricing
-              </Link>
+              <Link href="/contact?type=enterprise">Contact us for enterprise pricing</Link>
             </Button>
           </div>
         </div>

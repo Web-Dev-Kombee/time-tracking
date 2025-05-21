@@ -1,19 +1,19 @@
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { authOptions } from "@/lib/auth";
+import { getServerSession } from 'next-auth';
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { authOptions } from '@/lib/auth';
 
 export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Get query parameters
     const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get("limit") || "10", 10);
+    const limit = parseInt(searchParams.get('limit') || '10', 10);
 
     // Get recent time entries
     const timeEntries = await prisma.timeEntry.findMany({
@@ -28,7 +28,7 @@ export async function GET(request: Request) {
         },
       },
       orderBy: {
-        updatedAt: "desc",
+        updatedAt: 'desc',
       },
       take: limit,
     });
@@ -46,7 +46,7 @@ export async function GET(request: Request) {
         },
       },
       orderBy: {
-        updatedAt: "desc",
+        updatedAt: 'desc',
       },
       take: limit,
     });
@@ -60,7 +60,7 @@ export async function GET(request: Request) {
         client: true,
       },
       orderBy: {
-        updatedAt: "desc",
+        updatedAt: 'desc',
       },
       take: limit,
     });
@@ -74,7 +74,7 @@ export async function GET(request: Request) {
         client: true,
       },
       orderBy: {
-        updatedAt: "desc",
+        updatedAt: 'desc',
       },
       take: limit,
     });
@@ -85,39 +85,39 @@ export async function GET(request: Request) {
         createdById: session.user.id,
       },
       orderBy: {
-        updatedAt: "desc",
+        updatedAt: 'desc',
       },
       take: limit,
     });
 
     // Merge and sort all activities by updated date
     const allActivities = [
-      ...timeEntries.map((entry) => ({
-        type: "time_entry",
+      ...timeEntries.map(entry => ({
+        type: 'time_entry',
         id: entry.id,
         data: entry,
         updatedAt: entry.updatedAt,
       })),
-      ...expenses.map((expense) => ({
-        type: "expense",
+      ...expenses.map(expense => ({
+        type: 'expense',
         id: expense.id,
         data: expense,
         updatedAt: expense.updatedAt,
       })),
-      ...invoices.map((invoice) => ({
-        type: "invoice",
+      ...invoices.map(invoice => ({
+        type: 'invoice',
         id: invoice.id,
         data: invoice,
         updatedAt: invoice.updatedAt,
       })),
-      ...projects.map((project) => ({
-        type: "project",
+      ...projects.map(project => ({
+        type: 'project',
         id: project.id,
         data: project,
         updatedAt: project.updatedAt,
       })),
-      ...clients.map((client) => ({
-        type: "client",
+      ...clients.map(client => ({
+        type: 'client',
         id: client.id,
         data: client,
         updatedAt: client.updatedAt,
@@ -131,7 +131,7 @@ export async function GET(request: Request) {
       activeProjects: await prisma.project.count({
         where: {
           createdById: session.user.id,
-          status: "ACTIVE",
+          status: 'ACTIVE',
         },
       }),
       totalClients: await prisma.client.count({
@@ -143,7 +143,7 @@ export async function GET(request: Request) {
         where: {
           userId: session.user.id,
           status: {
-            in: ["SENT", "OVERDUE"],
+            in: ['SENT', 'OVERDUE'],
           },
         },
       }),
@@ -155,11 +155,8 @@ export async function GET(request: Request) {
       stats,
     });
   } catch (error) {
-    console.error("Error fetching activity:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch activity" },
-      { status: 500 }
-    );
+    console.error('Error fetching activity:', error);
+    return NextResponse.json({ error: 'Failed to fetch activity' }, { status: 500 });
   }
 }
 
@@ -186,8 +183,7 @@ async function calculateHoursThisMonth(userId: string) {
 
     const startTime = new Date(entry.startTime);
     const endTime = new Date(entry.endTime);
-    const durationHours =
-      (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
+    const durationHours = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
 
     return total + durationHours;
   }, 0);

@@ -1,14 +1,9 @@
-import { CheckCircle2, HelpCircle } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { CheckCircle2, HelpCircle } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 export const metadata = {
-  title: "Pricing - TimeTracker",
-  description: "Choose the right plan for your time tracking and billing needs",
+  title: 'Pricing - TimeTracker',
+  description: 'Choose the right plan for your time tracking and billing needs',
 };
 
 export default function PricingPage() {
@@ -19,8 +14,7 @@ export default function PricingPage() {
           Simple, Transparent Pricing
         </h1>
         <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-          Choose the right plan for your business. All plans include a 14-day
-          free trial.
+          Choose the right plan for your business. All plans include a 14-day free trial.
         </p>
       </div>
 
@@ -123,8 +117,8 @@ export default function PricingPage() {
       <div className="border rounded-lg p-8 mb-16">
         <h2 className="text-2xl font-bold mb-6">Enterprise</h2>
         <p className="text-lg mb-6">
-          Need a custom solution for your larger team or specific requirements?
-          Our enterprise plan offers custom features and dedicated support.
+          Need a custom solution for your larger team or specific requirements? Our enterprise plan
+          offers custom features and dedicated support.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <ul className="space-y-3">
@@ -150,37 +144,30 @@ export default function PricingPage() {
 
       {/* FAQ */}
       <div>
-        <h2 className="text-3xl font-bold text-center mb-8">
-          Frequently Asked Questions
-        </h2>
+        <h2 className="text-3xl font-bold text-center mb-8">Frequently Asked Questions</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-2">
             <h3 className="text-xl font-bold">Can I change my plan later?</h3>
             <p className="text-muted-foreground">
-              Yes, you can upgrade, downgrade, or cancel your plan at any time
-              from your account settings.
+              Yes, you can upgrade, downgrade, or cancel your plan at any time from your account
+              settings.
             </p>
           </div>
           <div className="space-y-2">
             <h3 className="text-xl font-bold">How does the free trial work?</h3>
             <p className="text-muted-foreground">
-              Your 14-day free trial includes all features of the plan you
-              choose. No credit card required until your trial ends.
+              Your 14-day free trial includes all features of the plan you choose. No credit card
+              required until your trial ends.
             </p>
           </div>
           <div className="space-y-2">
-            <h3 className="text-xl font-bold">
-              What payment methods do you accept?
-            </h3>
+            <h3 className="text-xl font-bold">What payment methods do you accept?</h3>
             <p className="text-muted-foreground">
-              We accept all major credit cards, PayPal, and bank transfers for
-              annual plans.
+              We accept all major credit cards, PayPal, and bank transfers for annual plans.
             </p>
           </div>
           <div className="space-y-2">
-            <h3 className="text-xl font-bold">
-              Is there an annual billing option?
-            </h3>
+            <h3 className="text-xl font-bold">Is there an annual billing option?</h3>
             <p className="text-muted-foreground">
               Yes, you can save 20% by choosing annual billing on any paid plan.
             </p>
@@ -191,13 +178,7 @@ export default function PricingPage() {
   );
 }
 
-function PricingFeature({
-  children,
-  tooltip,
-}: {
-  children: React.ReactNode;
-  tooltip?: string;
-}) {
+function PricingFeature({ children, tooltip }: { children: React.ReactNode; tooltip?: string }) {
   return (
     <li className="flex items-start">
       <CheckCircle2 className="h-5 w-5 text-primary mr-2 flex-shrink-0 mt-0.5" />

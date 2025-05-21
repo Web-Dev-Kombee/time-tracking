@@ -1,14 +1,8 @@
-import { getServerSession } from "next-auth";
-import { redirect, notFound } from "next/navigation";
-import { ClientForm } from "@/components/forms/ClientForm";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { prisma } from "@/lib/prisma";
+import { getServerSession } from 'next-auth';
+import { redirect, notFound } from 'next/navigation';
+import { ClientForm } from '@/components/forms/ClientForm';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { prisma } from '@/lib/prisma';
 
 interface EditClientPageProps {
   params: {
@@ -20,7 +14,7 @@ export default async function EditClientPage({ params }: EditClientPageProps) {
   const session = await getServerSession();
 
   if (!session?.user) {
-    return redirect("/login");
+    return redirect('/login');
   }
 
   const client = await prisma.client.findUnique({
@@ -40,9 +34,7 @@ export default async function EditClientPage({ params }: EditClientPageProps) {
       <Card>
         <CardHeader>
           <CardTitle>Edit {client.name}</CardTitle>
-          <CardDescription>
-            Update client information and contact details.
-          </CardDescription>
+          <CardDescription>Update client information and contact details.</CardDescription>
         </CardHeader>
         <CardContent>
           <ClientForm client={client} />

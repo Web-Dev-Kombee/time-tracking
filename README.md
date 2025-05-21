@@ -49,6 +49,35 @@ src/
 - **Form Handling**: React Hook Form + Zod validation
 - **State Management**: React Query, Zustand
 - **Notifications**: Sonner
+- **Code Quality**: ESLint, Prettier, Husky, lint-staged, Commitlint
+
+---
+
+## 📏 **Code Quality & Contribution Guidelines**
+
+This project uses several tools to ensure code quality and consistency:
+
+- **ESLint**: Enforces code quality and style rules
+- **Prettier**: Ensures consistent code formatting
+- **Husky**: Runs checks before commits are made
+- **lint-staged**: Runs linters on staged files only
+- **Commitlint**: Ensures commit messages follow conventions
+
+### Commit Message Format
+
+We follow the [Conventional Commits](https://www.conventionalcommits.org/) standard:
+
+```
+<type>(<scope>): <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+Types include: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`
+
+Example: `feat(clients): add client creation form`
 
 ---
 

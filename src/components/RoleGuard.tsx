@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { ReactNode } from "react";
-import { useSession } from "next-auth/react";
-import { UserRole } from "@/types";
+import { ReactNode } from 'react';
+import { useSession } from 'next-auth/react';
+import { UserRole } from '@/types';
 
 interface RoleGuardProps {
   allowedRoles: UserRole[];
@@ -18,16 +18,12 @@ interface RoleGuardProps {
  *   <AdminOnlyComponent />
  * </RoleGuard>
  */
-export default function RoleGuard({
-  allowedRoles,
-  children,
-  fallback = null,
-}: RoleGuardProps) {
+export default function RoleGuard({ allowedRoles, children, fallback = null }: RoleGuardProps) {
   const { data: session, status } = useSession();
   const userRole = session?.user?.role as UserRole;
 
   // While loading, show nothing
-  if (status === "loading") {
+  if (status === 'loading') {
     return null;
   }
 

@@ -1,12 +1,6 @@
-import ClientDeleteButton from "@/components/clients/ClientDeleteButton";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card";
+import ClientDeleteButton from '@/components/clients/ClientDeleteButton';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -14,8 +8,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { prisma } from "@/lib/prisma";
+} from '@/components/ui/table';
+import { prisma } from '@/lib/prisma';
 import {
   ArrowLeft,
   Building2,
@@ -26,10 +20,10 @@ import {
   Pencil,
   Phone,
   PlusCircle,
-} from "lucide-react";
-import { getServerSession } from "next-auth";
-import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+} from 'lucide-react';
+import { getServerSession } from 'next-auth';
+import Link from 'next/link';
+import { notFound, redirect } from 'next/navigation';
 
 interface ClientPageProps {
   params: {
@@ -41,7 +35,7 @@ export default async function ClientPage({ params }: ClientPageProps) {
   const session = await getServerSession();
 
   if (!session?.user) {
-    return redirect("/login");
+    return redirect('/login');
   }
 
   const client = await prisma.client.findUnique({
@@ -51,7 +45,7 @@ export default async function ClientPage({ params }: ClientPageProps) {
     include: {
       projects: {
         orderBy: {
-          createdAt: "desc",
+          createdAt: 'desc',
         },
       },
     },
@@ -125,9 +119,7 @@ export default async function ClientPage({ params }: ClientPageProps) {
                 <ClipboardList className="h-4 w-4 text-gray-400 mt-1" />
                 <div>
                   <p className="text-sm font-medium">Notes</p>
-                  <p className="text-sm text-gray-500 whitespace-pre-line">
-                    {client.notes}
-                  </p>
+                  <p className="text-sm text-gray-500 whitespace-pre-line">{client.notes}</p>
                 </div>
               </div>
             )}
@@ -176,11 +168,9 @@ export default async function ClientPage({ params }: ClientPageProps) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {client.projects.map((project) => (
+                  {client.projects.map(project => (
                     <TableRow key={project.id}>
-                      <TableCell className="font-medium">
-                        {project.name}
-                      </TableCell>
+                      <TableCell className="font-medium">{project.name}</TableCell>
                       <TableCell>
                         <div
                           className={`text-xs px-2 py-1 rounded-full inline-flex items-center font-medium ${getStatusClasses(
@@ -212,13 +202,13 @@ export default async function ClientPage({ params }: ClientPageProps) {
 
 function getStatusClasses(status: string): string {
   switch (status) {
-    case "ACTIVE":
-      return "bg-green-100 text-green-700";
-    case "COMPLETED":
-      return "bg-blue-100 text-blue-700";
-    case "ARCHIVED":
-      return "bg-gray-100 text-gray-700";
+    case 'ACTIVE':
+      return 'bg-green-100 text-green-700';
+    case 'COMPLETED':
+      return 'bg-blue-100 text-blue-700';
+    case 'ARCHIVED':
+      return 'bg-gray-100 text-gray-700';
     default:
-      return "bg-gray-100 text-gray-700";
+      return 'bg-gray-100 text-gray-700';
   }
 }

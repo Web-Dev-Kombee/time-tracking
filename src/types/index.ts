@@ -1,7 +1,7 @@
-import { type DefaultSession } from "next-auth";
+import { type DefaultSession } from 'next-auth';
 
 // Extend Next Auth session types
-declare module "next-auth" {
+declare module 'next-auth' {
   interface Session {
     user: {
       id: string;
@@ -10,7 +10,7 @@ declare module "next-auth" {
       image?: string;
       role: UserRole;
       subscription: SubscriptionTier;
-    } & DefaultSession["user"];
+    } & DefaultSession['user'];
   }
 
   interface User {
@@ -19,7 +19,7 @@ declare module "next-auth" {
   }
 }
 
-declare module "next-auth/jwt" {
+declare module 'next-auth/jwt' {
   interface JWT {
     id: string;
     role: UserRole;
@@ -29,47 +29,47 @@ declare module "next-auth/jwt" {
 
 // User related types
 export enum UserRole {
-  SUPER_ADMIN = "SUPER_ADMIN",
-  ADMIN = "ADMIN",
-  ACCOUNTS = "ACCOUNTS",
-  SALES = "SALES",
-  EMPLOYEE = "EMPLOYEE",
+  SUPER_ADMIN = 'SUPER_ADMIN',
+  ADMIN = 'ADMIN',
+  ACCOUNTS = 'ACCOUNTS',
+  SALES = 'SALES',
+  EMPLOYEE = 'EMPLOYEE',
 }
 
 export enum SubscriptionTier {
-  FREE = "FREE",
-  BASIC = "BASIC",
-  PREMIUM = "PREMIUM",
+  FREE = 'FREE',
+  BASIC = 'BASIC',
+  PREMIUM = 'PREMIUM',
 }
 
 // Enums
 export enum ProjectStatus {
-  ACTIVE = "ACTIVE",
-  COMPLETED = "COMPLETED",
-  ARCHIVED = "ARCHIVED",
+  ACTIVE = 'ACTIVE',
+  COMPLETED = 'COMPLETED',
+  ARCHIVED = 'ARCHIVED',
 }
 
 export enum InvoiceStatus {
-  DRAFT = "DRAFT",
-  SENT = "SENT",
-  PAID = "PAID",
-  OVERDUE = "OVERDUE",
-  CANCELLED = "CANCELLED",
+  DRAFT = 'DRAFT',
+  SENT = 'SENT',
+  PAID = 'PAID',
+  OVERDUE = 'OVERDUE',
+  CANCELLED = 'CANCELLED',
 }
 
 export enum ItemType {
-  SERVICE = "SERVICE",
-  EXPENSE = "EXPENSE",
-  PRODUCT = "PRODUCT",
+  SERVICE = 'SERVICE',
+  EXPENSE = 'EXPENSE',
+  PRODUCT = 'PRODUCT',
 }
 
 export enum PaymentMethod {
-  BANK_TRANSFER = "BANK_TRANSFER",
-  CREDIT_CARD = "CREDIT_CARD",
-  STRIPE = "STRIPE",
-  PAYPAL = "PAYPAL",
-  CASH = "CASH",
-  OTHER = "OTHER",
+  BANK_TRANSFER = 'BANK_TRANSFER',
+  CREDIT_CARD = 'CREDIT_CARD',
+  STRIPE = 'STRIPE',
+  PAYPAL = 'PAYPAL',
+  CASH = 'CASH',
+  OTHER = 'OTHER',
 }
 
 // Base interfaces based on Prisma schema
@@ -178,7 +178,7 @@ export interface Payment {
 }
 
 // Extended interfaces with additional fields
-export interface ProjectWithRelations extends Omit<Project, "updatedAt"> {
+export interface ProjectWithRelations extends Omit<Project, 'updatedAt'> {
   client: {
     id: string;
     name: string;

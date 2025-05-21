@@ -1,7 +1,7 @@
-import { getServerSession } from "next-auth";
-import { redirect, notFound } from "next/navigation";
-import Link from "next/link";
-import { format, formatDistanceToNow } from "date-fns";
+import { getServerSession } from 'next-auth';
+import { redirect, notFound } from 'next/navigation';
+import Link from 'next/link';
+import { format, formatDistanceToNow } from 'date-fns';
 import {
   Clock,
   Edit,
@@ -11,19 +11,13 @@ import {
   Plus,
   CalendarClock,
   DollarSign,
-} from "lucide-react";
-import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+} from 'lucide-react';
+import { authOptions } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   ProjectStatus,
   Project,
@@ -31,19 +25,19 @@ import {
   Client,
   ProjectWithClient,
   TimeEntryWithDuration,
-} from "@/types";
+} from '@/types';
 
 // Helper function to get badge color based on project status
 function getStatusColor(status: ProjectStatus): string {
   switch (status) {
     case ProjectStatus.ACTIVE:
-      return "bg-green-100 text-green-800 hover:bg-green-100";
+      return 'bg-green-100 text-green-800 hover:bg-green-100';
     case ProjectStatus.COMPLETED:
-      return "bg-blue-100 text-blue-800 hover:bg-blue-100";
+      return 'bg-blue-100 text-blue-800 hover:bg-blue-100';
     case ProjectStatus.ARCHIVED:
-      return "bg-gray-100 text-gray-800 hover:bg-gray-100";
+      return 'bg-gray-100 text-gray-800 hover:bg-gray-100';
     default:
-      return "bg-gray-100 text-gray-800 hover:bg-gray-100";
+      return 'bg-gray-100 text-gray-800 hover:bg-gray-100';
   }
 }
 
@@ -57,7 +51,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const session = await getServerSession(authOptions);
 
   if (!session?.user) {
-    return redirect("/login");
+    return redirect('/login');
   }
 
   // Fetch the project with related data
@@ -70,7 +64,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       client: true,
       timeEntries: {
         orderBy: {
-          startTime: "desc",
+          startTime: 'desc',
         },
         take: 5,
       },
@@ -82,29 +76,25 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   }
 
   // Calculate project statistics
-  const totalHours = project.timeEntries.reduce(
-    (acc: number, entry: TimeEntry) => {
-      if (!entry.endTime) return acc;
+  const totalHours = project.timeEntries.reduce((acc: number, entry: TimeEntry) => {
+    if (!entry.endTime) return acc;
 
-      const startTime = new Date(entry.startTime);
-      const endTime = new Date(entry.endTime);
-      const durationHours =
-        (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
+    const startTime = new Date(entry.startTime);
+    const endTime = new Date(entry.endTime);
+    const durationHours = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
 
-      return acc + durationHours;
-    },
-    0
-  );
+    return acc + durationHours;
+  }, 0);
 
   const totalBillableAmount = totalHours * project.hourlyRate;
-  const createdDate = format(new Date(project.createdAt), "MMMM d, yyyy");
+  const createdDate = format(new Date(project.createdAt), 'MMMM d, yyyy');
   const updatedDate = formatDistanceToNow(new Date(project.updatedAt), {
     addSuffix: true,
   });
 
   // Format time entries
-  const timeEntriesWithDuration: TimeEntryWithDuration[] =
-    project.timeEntries.map((entry: TimeEntry) => {
+  const timeEntriesWithDuration: TimeEntryWithDuration[] = project.timeEntries.map(
+    (entry: TimeEntry) => {
       const startTime = new Date(entry.startTime);
       const endTime = entry.endTime ? new Date(entry.endTime) : new Date();
       const durationMs = endTime.getTime() - startTime.getTime();
@@ -115,13 +105,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       return {
         ...entry,
         duration,
-        formattedDate: format(startTime, "MMM d, yyyy"),
-        formattedStartTime: format(startTime, "h:mm a"),
-        formattedEndTime: entry.endTime
-          ? format(new Date(entry.endTime), "h:mm a")
-          : "In progress",
+        formattedDate: format(startTime, 'MMM d, yyyy'),
+        formattedStartTime: format(startTime, 'h:mm a'),
+        formattedEndTime: entry.endTime ? format(new Date(entry.endTime), 'h:mm a') : 'In progress',
       };
-    });
+    }
+  );
 
   return (
     <div className="space-y-6">
@@ -133,9 +122,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               {project.status.charAt(0) + project.status.slice(1).toLowerCase()}
             </Badge>
           </div>
-          <p className="text-muted-foreground mt-1">
-            Client: {project.client.name}
-          </p>
+          <p className="text-muted-foreground mt-1">Client: {project.client.name}</p>
         </div>
 
         <div className="flex items-center gap-2">
@@ -161,9 +148,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <CardContent className="pt-6">
             <div className="flex flex-col items-center text-center space-y-2">
               <Clock className="h-8 w-8 text-blue-600" />
-              <CardTitle className="text-2xl">
-                {totalHours.toFixed(1)}
-              </CardTitle>
+              <CardTitle className="text-2xl">{totalHours.toFixed(1)}</CardTitle>
               <CardDescription>Total Hours</CardDescription>
             </div>
           </CardContent>
@@ -173,9 +158,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <CardContent className="pt-6">
             <div className="flex flex-col items-center text-center space-y-2">
               <DollarSign className="h-8 w-8 text-green-600" />
-              <CardTitle className="text-2xl">
-                ${totalBillableAmount.toFixed(2)}
-              </CardTitle>
+              <CardTitle className="text-2xl">${totalBillableAmount.toFixed(2)}</CardTitle>
               <CardDescription>Billable Amount</CardDescription>
             </div>
           </CardContent>
@@ -219,18 +202,14 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <CardContent className="space-y-4">
               {project.description && (
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">
-                    Description
-                  </h3>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Description</h3>
                   <p>{project.description}</p>
                 </div>
               )}
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">
-                    Client
-                  </h3>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Client</h3>
                   <Link
                     href={`/dashboard/clients/${project.client.id}`}
                     className="text-blue-600 hover:underline"
@@ -240,26 +219,19 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">
-                    Status
-                  </h3>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Status</h3>
                   <Badge className={getStatusColor(project.status)}>
-                    {project.status.charAt(0) +
-                      project.status.slice(1).toLowerCase()}
+                    {project.status.charAt(0) + project.status.slice(1).toLowerCase()}
                   </Badge>
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">
-                    Hourly Rate
-                  </h3>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Hourly Rate</h3>
                   <p>${project.hourlyRate.toFixed(2)}</p>
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-medium text-muted-foreground mb-1">
-                    Last Updated
-                  </h3>
+                  <h3 className="text-sm font-medium text-muted-foreground mb-1">Last Updated</h3>
                   <p>{updatedDate}</p>
                 </div>
               </div>
@@ -270,9 +242,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
                 <CardTitle>Recent Activity</CardTitle>
-                <CardDescription>
-                  Recent time entries for this project
-                </CardDescription>
+                <CardDescription>Recent time entries for this project</CardDescription>
               </div>
               <Link href="/dashboard/time/new">
                 <Button variant="outline" size="sm">
@@ -298,17 +268,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {timeEntriesWithDuration.map((entry) => (
-                    <div
-                      key={entry.id}
-                      className="flex justify-between border-b pb-4"
-                    >
+                  {timeEntriesWithDuration.map(entry => (
+                    <div key={entry.id} className="flex justify-between border-b pb-4">
                       <div>
-                        <p className="font-medium">
-                          {entry.description || "No description"}
-                        </p>
+                        <p className="font-medium">{entry.description || 'No description'}</p>
                         <div className="text-sm text-muted-foreground">
-                          {entry.formattedDate}: {entry.formattedStartTime} -{" "}
+                          {entry.formattedDate}: {entry.formattedStartTime} -{' '}
                           {entry.formattedEndTime}
                         </div>
                       </div>
@@ -345,9 +310,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
                 <CardTitle>Time Entries</CardTitle>
-                <CardDescription>
-                  All time entries for this project
-                </CardDescription>
+                <CardDescription>All time entries for this project</CardDescription>
               </div>
               <Link href={`/dashboard/time/new?projectId=${project.id}`}>
                 <Button size="sm">
@@ -374,9 +337,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             </CardHeader>
             <CardContent className="text-center py-6">
               <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-medium">
-                Task Management Coming Soon
-              </h3>
+              <h3 className="text-lg font-medium">Task Management Coming Soon</h3>
               <p className="text-muted-foreground mt-1 mb-4">
                 This feature is currently under development
               </p>
@@ -388,9 +349,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <Card>
             <CardHeader>
               <CardTitle>Invoices</CardTitle>
-              <CardDescription>
-                Manage invoices for this project
-              </CardDescription>
+              <CardDescription>Manage invoices for this project</CardDescription>
             </CardHeader>
             <CardContent className="text-center py-6">
               <BarChart className="h-12 w-12 text-muted-foreground mx-auto mb-4" />

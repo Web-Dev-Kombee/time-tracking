@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ClientSchema } from "@/types/schemas";
-import { z } from "zod";
-import { toast } from "sonner";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ClientSchema } from '@/types/schemas';
+import { z } from 'zod';
+import { toast } from 'sonner';
 import {
   Form,
   FormControl,
@@ -14,12 +14,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Client } from "@/types";
-import { Loader2 } from "lucide-react";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Client } from '@/types';
+import { Loader2 } from 'lucide-react';
 
 interface ClientFormProps {
   client?: Client;
@@ -37,17 +37,17 @@ export function ClientForm({ client, closeModal }: ClientFormProps) {
     defaultValues: client
       ? {
           name: client.name,
-          email: client.email || "",
-          phone: client.phone || "",
-          address: client.address || "",
-          notes: client.notes || "",
+          email: client.email || '',
+          phone: client.phone || '',
+          address: client.address || '',
+          notes: client.notes || '',
         }
       : {
-          name: "",
-          email: "",
-          phone: "",
-          address: "",
-          notes: "",
+          name: '',
+          email: '',
+          phone: '',
+          address: '',
+          notes: '',
         },
   });
 
@@ -57,47 +57,47 @@ export function ClientForm({ client, closeModal }: ClientFormProps) {
       if (client) {
         // Update existing client
         const response = await fetch(`/api/clients/${client.id}`, {
-          method: "PUT",
+          method: 'PUT',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(data),
         });
 
         if (!response.ok) {
           const error = await response.json();
-          throw new Error(error.error || "Failed to update client");
+          throw new Error(error.error || 'Failed to update client');
         }
 
-        toast.success("Client updated successfully");
+        toast.success('Client updated successfully');
       } else {
         // Create new client
-        const response = await fetch("/api/clients", {
-          method: "POST",
+        const response = await fetch('/api/clients', {
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(data),
         });
 
         if (!response.ok) {
           const error = await response.json();
-          throw new Error(error.error || "Failed to create client");
+          throw new Error(error.error || 'Failed to create client');
         }
 
-        toast.success("Client created successfully");
+        toast.success('Client created successfully');
       }
 
       // Reset form and redirect if not in modal context
       if (closeModal) {
         closeModal();
       } else {
-        router.push("/dashboard/clients");
+        router.push('/dashboard/clients');
         router.refresh();
       }
     } catch (error) {
-      console.error("Error saving client:", error);
-      toast.error(error instanceof Error ? error.message : "An error occurred");
+      console.error('Error saving client:', error);
+      toast.error(error instanceof Error ? error.message : 'An error occurred');
     } finally {
       setIsLoading(false);
     }
@@ -127,11 +127,7 @@ export function ClientForm({ client, closeModal }: ClientFormProps) {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input
-                  type="email"
-                  placeholder="client@example.com"
-                  {...field}
-                />
+                <Input type="email" placeholder="client@example.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -173,10 +169,7 @@ export function ClientForm({ client, closeModal }: ClientFormProps) {
             <FormItem>
               <FormLabel>Notes</FormLabel>
               <FormControl>
-                <Textarea
-                  placeholder="Additional information about the client"
-                  {...field}
-                />
+                <Textarea placeholder="Additional information about the client" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -200,7 +193,7 @@ export function ClientForm({ client, closeModal }: ClientFormProps) {
           </Button>
           <Button type="submit" disabled={isLoading}>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {client ? "Update Client" : "Create Client"}
+            {client ? 'Update Client' : 'Create Client'}
           </Button>
         </div>
       </form>

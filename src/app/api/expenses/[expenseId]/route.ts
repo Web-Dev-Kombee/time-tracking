@@ -1,18 +1,15 @@
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { ExpenseSchema } from "@/types/schemas";
-import { authOptions } from "@/lib/auth";
+import { getServerSession } from 'next-auth';
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { ExpenseSchema } from '@/types/schemas';
+import { authOptions } from '@/lib/auth';
 
-export async function GET(
-  request: Request,
-  { params }: { params: { expenseId: string } }
-) {
+export async function GET(request: Request, { params }: { params: { expenseId: string } }) {
   try {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const expense = await prisma.expense.findUnique({
@@ -30,28 +27,22 @@ export async function GET(
     });
 
     if (!expense) {
-      return NextResponse.json({ error: "Expense not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Expense not found' }, { status: 404 });
     }
 
     return NextResponse.json(expense);
   } catch (error) {
-    console.error("Error fetching expense:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch expense" },
-      { status: 500 }
-    );
+    console.error('Error fetching expense:', error);
+    return NextResponse.json({ error: 'Failed to fetch expense' }, { status: 500 });
   }
 }
 
-export async function PUT(
-  request: Request,
-  { params }: { params: { expenseId: string } }
-) {
+export async function PUT(request: Request, { params }: { params: { expenseId: string } }) {
   try {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const json = await request.json();
@@ -66,7 +57,7 @@ export async function PUT(
     });
 
     if (!existingExpense) {
-      return NextResponse.json({ error: "Expense not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Expense not found' }, { status: 404 });
     }
 
     // Update expense
@@ -93,30 +84,24 @@ export async function PUT(
 
     return NextResponse.json(updatedExpense);
   } catch (error: any) {
-    if (error.name === "ZodError") {
+    if (error.name === 'ZodError') {
       return NextResponse.json(
-        { error: "Invalid expense data", details: error.errors },
+        { error: 'Invalid expense data', details: error.errors },
         { status: 400 }
       );
     }
 
-    console.error("Error updating expense:", error);
-    return NextResponse.json(
-      { error: "Failed to update expense" },
-      { status: 500 }
-    );
+    console.error('Error updating expense:', error);
+    return NextResponse.json({ error: 'Failed to update expense' }, { status: 500 });
   }
 }
 
-export async function DELETE(
-  request: Request,
-  { params }: { params: { expenseId: string } }
-) {
+export async function DELETE(request: Request, { params }: { params: { expenseId: string } }) {
   try {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Check if expense exists and belongs to user
@@ -128,7 +113,7 @@ export async function DELETE(
     });
 
     if (!existingExpense) {
-      return NextResponse.json({ error: "Expense not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Expense not found' }, { status: 404 });
     }
 
     // Delete expense
@@ -140,10 +125,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Error deleting expense:", error);
-    return NextResponse.json(
-      { error: "Failed to delete expense" },
-      { status: 500 }
-    );
+    console.error('Error deleting expense:', error);
+    return NextResponse.json({ error: 'Failed to delete expense' }, { status: 500 });
   }
 }

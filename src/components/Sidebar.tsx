@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { useSession } from "next-auth/react";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
+import { useSession } from 'next-auth/react';
 import {
   Clock,
   LayoutDashboard,
@@ -21,11 +21,11 @@ import {
   Shield,
   User,
   LucideIcon,
-} from "lucide-react";
-import { getAuthorizedNavItems } from "@/lib/rbac";
-import { UserRole } from "@/types";
-import { cn } from "@/lib/utils";
-import { ALL_NAV_ITEMS } from "@/constants";
+} from 'lucide-react';
+import { getAuthorizedNavItems } from '@/lib/rbac';
+import { UserRole } from '@/types';
+import { cn } from '@/lib/utils';
+import { ALL_NAV_ITEMS } from '@/constants';
 
 interface NavItemProps {
   href: string;
@@ -39,10 +39,10 @@ function NavItem({ href, icon, label, isActive }: NavItemProps) {
     <Link
       href={href}
       className={cn(
-        "flex items-center gap-3 px-3 py-2 rounded-md transition-colors",
+        'flex items-center gap-3 px-3 py-2 rounded-md transition-colors',
         isActive
-          ? "bg-primary/10 text-primary font-medium"
-          : "text-foreground hover:text-primary hover:bg-primary/5"
+          ? 'bg-primary/10 text-primary font-medium'
+          : 'text-foreground hover:text-primary hover:bg-primary/5'
       )}
     >
       {icon}
@@ -62,10 +62,10 @@ export default function Sidebar() {
   };
 
   const isLinkActive = (href: string) => {
-    if (href === "/dashboard" && pathname === "/dashboard") {
+    if (href === '/dashboard' && pathname === '/dashboard') {
       return true;
     }
-    return pathname.startsWith(href) && href !== "/dashboard";
+    return pathname.startsWith(href) && href !== '/dashboard';
   };
 
   // Function to get the icon component from icon name
@@ -94,7 +94,7 @@ export default function Sidebar() {
   };
 
   // Convert the constants to the format expected by the components
-  const allNavItems = ALL_NAV_ITEMS.map((item) => ({
+  const allNavItems = ALL_NAV_ITEMS.map(item => ({
     ...item,
     icon: getIconComponent(item.iconName),
   }));
@@ -115,17 +115,14 @@ export default function Sidebar() {
 
       {/* Sidebar background overlay */}
       {isOpen && (
-        <div
-          className="md:hidden fixed inset-0 bg-black/50 z-20"
-          onClick={toggleSidebar}
-        />
+        <div className="md:hidden fixed inset-0 bg-black/50 z-20" onClick={toggleSidebar} />
       )}
 
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed md:sticky top-0 left-0 h-full z-20 bg-card border-r shadow-sm w-64 transition-transform duration-300 transform",
-          isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+          'fixed md:sticky top-0 left-0 h-full z-20 bg-card border-r shadow-sm w-64 transition-transform duration-300 transform',
+          isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         )}
       >
         <div className="p-4 border-b">
@@ -135,14 +132,14 @@ export default function Sidebar() {
           </div>
           {session?.user && (
             <div className="mt-2 text-sm text-muted-foreground">
-              Role: {session.user.role.toLowerCase().replace("_", " ")}
+              Role: {session.user.role.toLowerCase().replace('_', ' ')}
             </div>
           )}
         </div>
 
         <nav className="p-3 overflow-y-auto h-[calc(100vh-4rem)]">
           <ul className="space-y-1">
-            {navItems.map((item) => (
+            {navItems.map(item => (
               <li key={item.href}>
                 <NavItem
                   href={item.href}

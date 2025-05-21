@@ -1,6 +1,6 @@
-import { ArrowRight, BarChart3, Clock, FileSpreadsheet } from "lucide-react";
-import Link from "next/link";
-import { ModeToggle } from "@/components/mode-toggle";
+import { ArrowRight, BarChart3, Clock, FileSpreadsheet } from 'lucide-react';
+import Link from 'next/link';
+import { ModeToggle } from '@/components/mode-toggle';
 import {
   APP_NAME,
   MARKETING_HERO,
@@ -8,7 +8,7 @@ import {
   MARKETING_CTA,
   MARKETING_FOOTER,
   MARKETING_NAV,
-} from "@/constants";
+} from '@/constants';
 
 export default function Home() {
   return (
@@ -21,7 +21,7 @@ export default function Home() {
           </div>
           <nav className="hidden md:flex items-center gap-6">
             {MARKETING_NAV.map((item, index) =>
-              item.label !== "Sign up free" ? (
+              item.label !== 'Sign up free' ? (
                 <Link
                   key={index}
                   href={item.href}
@@ -62,7 +62,7 @@ export default function Home() {
         <section className="py-20 md:py-28 bg-background">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              {MARKETING_HERO.title.split("your business")[0]}
+              {MARKETING_HERO.title.split('your business')[0]}
               <span className="text-primary">your business</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-10">
@@ -88,29 +88,20 @@ export default function Home() {
 
         <section className="py-16 bg-muted">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-12">
-              {MARKETING_FEATURES.title}
-            </h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{MARKETING_FEATURES.title}</h2>
             <div className="grid md:grid-cols-3 gap-8">
               {MARKETING_FEATURES.features.map((feature, index) => {
                 const icons = [
                   <Clock key="clock" className="h-6 w-6 text-primary" />,
-                  <FileSpreadsheet
-                    key="file"
-                    className="h-6 w-6 text-primary"
-                  />,
+                  <FileSpreadsheet key="file" className="h-6 w-6 text-primary" />,
                   <BarChart3 key="chart" className="h-6 w-6 text-primary" />,
                 ];
 
                 return (
                   <div key={index} className="bg-card p-6 rounded-lg shadow-sm">
-                    <div className="bg-primary/10 p-3 rounded-full w-fit mb-4">
-                      {icons[index]}
-                    </div>
+                    <div className="bg-primary/10 p-3 rounded-full w-fit mb-4">{icons[index]}</div>
                     <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-                    <p className="text-muted-foreground">
-                      {feature.description}
-                    </p>
+                    <p className="text-muted-foreground">{feature.description}</p>
                   </div>
                 );
               })}

@@ -1,9 +1,8 @@
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2 } from 'lucide-react';
 
 export const metadata = {
-  title: "Features - TimeTracker",
-  description:
-    "Powerful time tracking and billing features to streamline your workflow",
+  title: 'Features - TimeTracker',
+  description: 'Powerful time tracking and billing features to streamline your workflow',
 };
 
 export default function FeaturesPage() {
@@ -14,8 +13,8 @@ export default function FeaturesPage() {
           Powerful Time Tracking & Billing
         </h1>
         <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-          Our comprehensive feature set helps you track time, manage projects,
-          bill clients, and boost productivity.
+          Our comprehensive feature set helps you track time, manage projects, bill clients, and
+          boost productivity.
         </p>
       </div>
 
@@ -59,8 +58,8 @@ export default function FeaturesPage() {
           <div>
             <h2 className="text-3xl font-bold mb-4">Seamless Time Tracking</h2>
             <p className="text-muted-foreground mb-6">
-              Our intuitive time tracking interface makes it easy to log hours,
-              whether you're working on client projects or internal tasks.
+              Our intuitive time tracking interface makes it easy to log hours, whether you're
+              working on client projects or internal tasks.
             </p>
             <ul className="space-y-2">
               <FeatureItem>One-click timer start/stop</FeatureItem>
@@ -71,9 +70,7 @@ export default function FeaturesPage() {
             </ul>
           </div>
           <div className="bg-muted rounded-lg p-4 flex items-center justify-center h-[300px]">
-            <p className="text-center text-muted-foreground">
-              Time tracking interface mockup
-            </p>
+            <p className="text-center text-muted-foreground">Time tracking interface mockup</p>
           </div>
         </div>
       </div>
@@ -141,12 +138,9 @@ export default function FeaturesPage() {
 
       {/* Call to Action */}
       <div className="text-center">
-        <h2 className="text-3xl font-bold mb-6">
-          Ready to boost your productivity?
-        </h2>
+        <h2 className="text-3xl font-bold mb-6">Ready to boost your productivity?</h2>
         <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-          Join thousands of professionals who use TimeTracker to streamline
-          their workflow.
+          Join thousands of professionals who use TimeTracker to streamline their workflow.
         </p>
         <div className="flex gap-4 justify-center">
           <a

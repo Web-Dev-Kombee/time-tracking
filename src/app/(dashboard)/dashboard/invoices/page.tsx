@@ -1,34 +1,28 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { Plus, Filter } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { InvoiceStatus } from "@/types";
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { Plus, Filter } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { InvoiceStatus } from '@/types';
 
 // Fetch invoices function
 async function fetchInvoices(status?: string) {
-  const url = status ? `/api/invoices?status=${status}` : "/api/invoices";
+  const url = status ? `/api/invoices?status=${status}` : '/api/invoices';
   const res = await fetch(url);
 
   if (!res.ok) {
-    throw new Error("Failed to fetch invoices");
+    throw new Error('Failed to fetch invoices');
   }
 
   return res.json();
 }
 
 export default function InvoicesPage() {
-  const [selectedStatus, setSelectedStatus] = useState<string>("all");
+  const [selectedStatus, setSelectedStatus] = useState<string>('all');
 
   // Fetch invoices with react-query
   const {
@@ -36,29 +30,28 @@ export default function InvoicesPage() {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["invoices", selectedStatus],
-    queryFn: () =>
-      fetchInvoices(selectedStatus !== "all" ? selectedStatus : undefined),
+    queryKey: ['invoices', selectedStatus],
+    queryFn: () => fetchInvoices(selectedStatus !== 'all' ? selectedStatus : undefined),
   });
 
   if (error) {
-    toast.error("Failed to load invoices");
+    toast.error('Failed to load invoices');
   }
 
   const getStatusColor = (status: InvoiceStatus) => {
     switch (status) {
       case InvoiceStatus.PAID:
-        return "bg-green-100 text-green-800";
+        return 'bg-green-100 text-green-800';
       case InvoiceStatus.OVERDUE:
-        return "bg-red-100 text-red-800";
+        return 'bg-red-100 text-red-800';
       case InvoiceStatus.SENT:
-        return "bg-blue-100 text-blue-800";
+        return 'bg-blue-100 text-blue-800';
       case InvoiceStatus.DRAFT:
-        return "bg-gray-100 text-gray-800";
+        return 'bg-gray-100 text-gray-800';
       case InvoiceStatus.CANCELLED:
-        return "bg-yellow-100 text-yellow-800";
+        return 'bg-yellow-100 text-yellow-800';
       default:
-        return "bg-gray-100 text-gray-800";
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -92,9 +85,7 @@ export default function InvoicesPage() {
           <Card>
             <CardHeader>
               <CardTitle>All Invoices</CardTitle>
-              <CardDescription>
-                View and manage all your invoices
-              </CardDescription>
+              <CardDescription>View and manage all your invoices</CardDescription>
             </CardHeader>
             <CardContent>
               {isLoading ? (
@@ -115,10 +106,7 @@ export default function InvoicesPage() {
                     </thead>
                     <tbody>
                       {invoices.map((invoice: any) => (
-                        <tr
-                          key={invoice.id}
-                          className="border-b hover:bg-muted/50"
-                        >
+                        <tr key={invoice.id} className="border-b hover:bg-muted/50">
                           <td className="py-3 px-4">{invoice.invoiceNumber}</td>
                           <td className="py-3 px-4">{invoice.client.name}</td>
                           <td className="py-3 px-4">
@@ -136,9 +124,7 @@ export default function InvoicesPage() {
                               {invoice.status}
                             </span>
                           </td>
-                          <td className="py-3 px-4 text-right">
-                            ${invoice.total.toFixed(2)}
-                          </td>
+                          <td className="py-3 px-4 text-right">${invoice.total.toFixed(2)}</td>
                           <td className="py-3 px-4 text-right">
                             <Button variant="ghost" size="sm">
                               View
@@ -156,13 +142,11 @@ export default function InvoicesPage() {
           </Card>
         </TabsContent>
 
-        {["DRAFT", "SENT", "PAID", "OVERDUE"].map((status) => (
+        {['DRAFT', 'SENT', 'PAID', 'OVERDUE'].map(status => (
           <TabsContent key={status} value={status} className="mt-0">
             <Card>
               <CardHeader>
-                <CardTitle>
-                  {status.charAt(0) + status.slice(1).toLowerCase()} Invoices
-                </CardTitle>
+                <CardTitle>{status.charAt(0) + status.slice(1).toLowerCase()} Invoices</CardTitle>
                 <CardDescription>
                   View and manage your {status.toLowerCase()} invoices
                 </CardDescription>
@@ -185,13 +169,8 @@ export default function InvoicesPage() {
                       </thead>
                       <tbody>
                         {invoices.map((invoice: any) => (
-                          <tr
-                            key={invoice.id}
-                            className="border-b hover:bg-muted/50"
-                          >
-                            <td className="py-3 px-4">
-                              {invoice.invoiceNumber}
-                            </td>
+                          <tr key={invoice.id} className="border-b hover:bg-muted/50">
+                            <td className="py-3 px-4">{invoice.invoiceNumber}</td>
                             <td className="py-3 px-4">{invoice.client.name}</td>
                             <td className="py-3 px-4">
                               {new Date(invoice.issueDate).toLocaleDateString()}
@@ -199,9 +178,7 @@ export default function InvoicesPage() {
                             <td className="py-3 px-4">
                               {new Date(invoice.dueDate).toLocaleDateString()}
                             </td>
-                            <td className="py-3 px-4 text-right">
-                              ${invoice.total.toFixed(2)}
-                            </td>
+                            <td className="py-3 px-4 text-right">${invoice.total.toFixed(2)}</td>
                             <td className="py-3 px-4 text-right">
                               <Button variant="ghost" size="sm">
                                 View
@@ -213,9 +190,7 @@ export default function InvoicesPage() {
                     </table>
                   </div>
                 ) : (
-                  <p className="text-center py-4">
-                    No {status.toLowerCase()} invoices found
-                  </p>
+                  <p className="text-center py-4">No {status.toLowerCase()} invoices found</p>
                 )}
               </CardContent>
             </Card>

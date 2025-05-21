@@ -1,13 +1,13 @@
 // Use the standard import for PrismaClient but mark it as 'any' to avoid TypeScript errors
 // @ts-ignore
-import { PrismaClient } from "@prisma/client";
-import { UserRole, SubscriptionTier, ProjectStatus } from "../src/types";
-import bcrypt from "bcrypt";
+import { PrismaClient } from '@prisma/client';
+import { UserRole, SubscriptionTier, ProjectStatus } from '../src/types';
+import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("Starting to seed the database...");
+  console.log('Starting to seed the database...');
 
   // Clean the database first
   await prisma.payment.deleteMany({});
@@ -20,11 +20,11 @@ async function main() {
   await prisma.user.deleteMany({});
 
   // Create admin user
-  const hashedPassword = await bcrypt.hash("password123", 10);
+  const hashedPassword = await bcrypt.hash('password123', 10);
   const admin = await prisma.user.create({
     data: {
-      name: "Admin User",
-      email: "admin@example.com",
+      name: 'Admin User',
+      email: 'admin@example.com',
       password: hashedPassword,
       role: UserRole.ADMIN,
       subscription: SubscriptionTier.PREMIUM,
@@ -36,8 +36,8 @@ async function main() {
   // Create a regular user
   const user = await prisma.user.create({
     data: {
-      name: "Test User",
-      email: "user@example.com",
+      name: 'Test User',
+      email: 'user@example.com',
       password: hashedPassword,
       role: UserRole.USER,
       subscription: SubscriptionTier.FREE,
@@ -49,21 +49,21 @@ async function main() {
   // Create clients
   const client1 = await prisma.client.create({
     data: {
-      name: "Acme Inc.",
-      email: "contact@acme.com",
-      phone: "555-1234",
-      address: "123 Business St, Suite 100, New York, NY 10001",
-      notes: "Major client, priority support",
+      name: 'Acme Inc.',
+      email: 'contact@acme.com',
+      phone: '555-1234',
+      address: '123 Business St, Suite 100, New York, NY 10001',
+      notes: 'Major client, priority support',
       createdById: admin.id,
     },
   });
 
   const client2 = await prisma.client.create({
     data: {
-      name: "Globex Corporation",
-      email: "info@globex.com",
-      phone: "555-5678",
-      address: "500 Enterprise Blvd, San Francisco, CA 94107",
+      name: 'Globex Corporation',
+      email: 'info@globex.com',
+      phone: '555-5678',
+      address: '500 Enterprise Blvd, San Francisco, CA 94107',
       createdById: admin.id,
     },
   });
@@ -73,8 +73,8 @@ async function main() {
   // Create projects
   const project1 = await prisma.project.create({
     data: {
-      name: "Website Redesign",
-      description: "Complete overhaul of company website with new branding",
+      name: 'Website Redesign',
+      description: 'Complete overhaul of company website with new branding',
       status: ProjectStatus.ACTIVE,
       clientId: client1.id,
       createdById: admin.id,
@@ -84,8 +84,8 @@ async function main() {
 
   const project2 = await prisma.project.create({
     data: {
-      name: "Mobile App Development",
-      description: "iOS and Android app for customer portal",
+      name: 'Mobile App Development',
+      description: 'iOS and Android app for customer portal',
       status: ProjectStatus.ACTIVE,
       clientId: client1.id,
       createdById: admin.id,
@@ -95,8 +95,8 @@ async function main() {
 
   const project3 = await prisma.project.create({
     data: {
-      name: "Marketing Campaign",
-      description: "Q3 digital marketing campaign",
+      name: 'Marketing Campaign',
+      description: 'Q3 digital marketing campaign',
       status: ProjectStatus.ACTIVE,
       clientId: client2.id,
       createdById: admin.id,
@@ -116,7 +116,7 @@ async function main() {
 
   await prisma.timeEntry.create({
     data: {
-      description: "Homepage design implementation",
+      description: 'Homepage design implementation',
       startTime: new Date(yesterday.setHours(9, 0, 0)),
       endTime: new Date(yesterday.setHours(12, 30, 0)),
       projectId: project1.id,
@@ -126,7 +126,7 @@ async function main() {
 
   await prisma.timeEntry.create({
     data: {
-      description: "API development",
+      description: 'API development',
       startTime: new Date(yesterday.setHours(13, 30, 0)),
       endTime: new Date(yesterday.setHours(17, 0, 0)),
       projectId: project2.id,
@@ -136,7 +136,7 @@ async function main() {
 
   await prisma.timeEntry.create({
     data: {
-      description: "Content creation for ads",
+      description: 'Content creation for ads',
       startTime: new Date(lastWeek.setHours(10, 0, 0)),
       endTime: new Date(lastWeek.setHours(15, 45, 0)),
       projectId: project3.id,
@@ -149,7 +149,7 @@ async function main() {
   // Create expenses
   await prisma.expense.create({
     data: {
-      description: "Stock photos for website",
+      description: 'Stock photos for website',
       amount: 79.99,
       date: yesterday,
       billable: true,
@@ -160,7 +160,7 @@ async function main() {
 
   await prisma.expense.create({
     data: {
-      description: "Software license",
+      description: 'Software license',
       amount: 299.0,
       date: lastWeek,
       billable: true,
@@ -171,12 +171,12 @@ async function main() {
 
   console.log(`Created ${2} expenses`);
 
-  console.log("Seeding completed successfully!");
+  console.log('Seeding completed successfully!');
 }
 
 main()
-  .catch((e) => {
-    console.error("Error during seeding:", e);
+  .catch(e => {
+    console.error('Error during seeding:', e);
     process.exit(1);
   })
   .finally(async () => {

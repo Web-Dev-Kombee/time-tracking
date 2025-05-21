@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { LoginSchema } from "@/types/schemas";
-import { z } from "zod";
-import { Clock, Loader2, Eye, EyeOff } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { LoginSchema } from '@/types/schemas';
+import { z } from 'zod';
+import { Clock, Loader2, Eye, EyeOff } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -18,10 +18,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+} from '@/components/ui/form';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 
 type LoginFormData = z.infer<typeof LoginSchema>;
 
@@ -34,8 +34,8 @@ export default function LoginPage() {
   const form = useForm<LoginFormData>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
 
@@ -44,22 +44,22 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const result = await signIn("credentials", {
+      const result = await signIn('credentials', {
         email: data.email,
         password: data.password,
         redirect: false,
       });
       debugger;
       if (result?.error) {
-        setError("Invalid email or password");
+        setError('Invalid email or password');
         setIsLoading(false);
         return;
       }
 
-      router.push("/dashboard");
+      router.push('/dashboard');
       router.refresh();
     } catch (error) {
-      setError("Something went wrong. Please try again.");
+      setError('Something went wrong. Please try again.');
       setIsLoading(false);
     }
   };
@@ -69,9 +69,9 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      await signIn("google", { callbackUrl: "/dashboard" });
+      await signIn('google', { callbackUrl: '/dashboard' });
     } catch (error) {
-      setError("Failed to sign in with Google");
+      setError('Failed to sign in with Google');
       setIsLoading(false);
     }
   };
@@ -86,9 +86,7 @@ export default function LoginPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl font-bold text-center">
-              Log in to your account
-            </CardTitle>
+            <CardTitle className="text-2xl font-bold text-center">Log in to your account</CardTitle>
           </CardHeader>
           <CardContent>
             {error && (
@@ -98,10 +96,7 @@ export default function LoginPage() {
             )}
 
             <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4"
-              >
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
                   control={form.control}
                   name="email"
@@ -109,11 +104,7 @@ export default function LoginPage() {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Enter your email"
-                          type="email"
-                          {...field}
-                        />
+                        <Input placeholder="Enter your email" type="email" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -138,7 +129,7 @@ export default function LoginPage() {
                         <div className="relative">
                           <Input
                             placeholder="Enter your password"
-                            type={showPassword ? "text" : "password"}
+                            type={showPassword ? 'text' : 'password'}
                             {...field}
                           />
                           <button
@@ -161,9 +152,7 @@ export default function LoginPage() {
                 />
 
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  )}
+                  {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Log in
                 </Button>
               </form>
@@ -174,9 +163,7 @@ export default function LoginPage() {
                 <Separator className="w-full" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-card text-muted-foreground">
-                  Or continue with
-                </span>
+                <span className="px-2 bg-card text-muted-foreground">Or continue with</span>
               </div>
             </div>
 
@@ -215,7 +202,7 @@ export default function LoginPage() {
         </Card>
 
         <p className="mt-6 text-center text-sm text-muted-foreground">
-          Don't have an account?{" "}
+          Don't have an account?{' '}
           <Link href="/register" className="text-primary hover:underline">
             Sign up
           </Link>

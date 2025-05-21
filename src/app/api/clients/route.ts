@@ -1,8 +1,8 @@
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { ClientSchema } from "@/types/schemas";
-import { authOptions } from "@/lib/auth";
+import { getServerSession } from 'next-auth';
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { ClientSchema } from '@/types/schemas';
+import { authOptions } from '@/lib/auth';
 
 // GET all clients
 export async function GET() {
@@ -10,7 +10,7 @@ export async function GET() {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const clients = await prisma.client.findMany({
@@ -18,17 +18,14 @@ export async function GET() {
         createdById: session.user.id,
       },
       orderBy: {
-        createdAt: "desc",
+        createdAt: 'desc',
       },
     });
 
     return NextResponse.json(clients);
   } catch (error) {
-    console.error("Error fetching clients:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch clients" },
-      { status: 500 }
-    );
+    console.error('Error fetching clients:', error);
+    return NextResponse.json({ error: 'Failed to fetch clients' }, { status: 500 });
   }
 }
 
@@ -38,7 +35,7 @@ export async function POST(request: Request) {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const json = await request.json();
@@ -53,17 +50,14 @@ export async function POST(request: Request) {
 
     return NextResponse.json(client, { status: 201 });
   } catch (error: any) {
-    if (error.name === "ZodError") {
+    if (error.name === 'ZodError') {
       return NextResponse.json(
-        { error: "Invalid client data", details: error.errors },
+        { error: 'Invalid client data', details: error.errors },
         { status: 400 }
       );
     }
 
-    console.error("Error creating client:", error);
-    return NextResponse.json(
-      { error: "Failed to create client" },
-      { status: 500 }
-    );
+    console.error('Error creating client:', error);
+    return NextResponse.json({ error: 'Failed to create client' }, { status: 500 });
   }
 }

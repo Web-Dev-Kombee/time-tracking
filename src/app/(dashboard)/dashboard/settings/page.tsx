@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { toast } from "sonner";
-import { Save } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from 'react';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { toast } from 'sonner';
+import { Save } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -15,7 +15,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -24,42 +24,42 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import React from "react";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React from 'react';
 
 // Profile form schema
 const profileFormSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Invalid email address'),
 });
 
 // Password form schema
 const passwordFormSchema = z
   .object({
-    currentPassword: z.string().min(1, "Current password is required"),
-    newPassword: z.string().min(8, "Password must be at least 8 characters"),
-    confirmPassword: z.string().min(1, "Please confirm your password"),
+    currentPassword: z.string().min(1, 'Current password is required'),
+    newPassword: z.string().min(8, 'Password must be at least 8 characters'),
+    confirmPassword: z.string().min(1, 'Please confirm your password'),
   })
-  .refine((data) => data.newPassword === data.confirmPassword, {
+  .refine(data => data.newPassword === data.confirmPassword, {
     message: "Passwords don't match",
-    path: ["confirmPassword"],
+    path: ['confirmPassword'],
   });
 
 // Fetch user settings
 async function fetchUserSettings() {
-  const res = await fetch("/api/settings");
+  const res = await fetch('/api/settings');
 
   if (!res.ok) {
-    throw new Error("Failed to fetch user settings");
+    throw new Error('Failed to fetch user settings');
   }
 
   return res.json();
 }
 
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = useState("profile");
+  const [activeTab, setActiveTab] = useState('profile');
 
   // Fetch user settings
   const {
@@ -67,7 +67,7 @@ export default function SettingsPage() {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["userSettings"],
+    queryKey: ['userSettings'],
     queryFn: fetchUserSettings,
   });
 
@@ -75,8 +75,8 @@ export default function SettingsPage() {
   const profileForm = useForm<z.infer<typeof profileFormSchema>>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      name: "",
-      email: "",
+      name: '',
+      email: '',
     },
   });
 
@@ -84,68 +84,68 @@ export default function SettingsPage() {
   const passwordForm = useForm<z.infer<typeof passwordFormSchema>>({
     resolver: zodResolver(passwordFormSchema),
     defaultValues: {
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: '',
     },
   });
 
   // Update profile mutation
   const updateProfileMutation = useMutation({
     mutationFn: async (data: z.infer<typeof profileFormSchema>) => {
-      const res = await fetch("/api/settings", {
-        method: "PATCH",
+      const res = await fetch('/api/settings', {
+        method: 'PATCH',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          action: "updateProfile",
+          action: 'updateProfile',
           data,
         }),
       });
 
       if (!res.ok) {
         const error = await res.json();
-        throw new Error(error.error || "Failed to update profile");
+        throw new Error(error.error || 'Failed to update profile');
       }
 
       return res.json();
     },
     onSuccess: () => {
-      toast.success("Profile updated successfully");
+      toast.success('Profile updated successfully');
     },
-    onError: (error) => {
-      toast.error(error.message || "Failed to update profile");
+    onError: error => {
+      toast.error(error.message || 'Failed to update profile');
     },
   });
 
   // Update password mutation
   const updatePasswordMutation = useMutation({
     mutationFn: async (data: z.infer<typeof passwordFormSchema>) => {
-      const res = await fetch("/api/settings", {
-        method: "PATCH",
+      const res = await fetch('/api/settings', {
+        method: 'PATCH',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          action: "updatePassword",
+          action: 'updatePassword',
           data,
         }),
       });
 
       if (!res.ok) {
         const error = await res.json();
-        throw new Error(error.error || "Failed to update password");
+        throw new Error(error.error || 'Failed to update password');
       }
 
       return res.json();
     },
     onSuccess: () => {
-      toast.success("Password updated successfully");
+      toast.success('Password updated successfully');
       passwordForm.reset();
     },
-    onError: (error) => {
-      toast.error(error.message || "Failed to update password");
+    onError: error => {
+      toast.error(error.message || 'Failed to update password');
     },
   });
 
@@ -153,8 +153,8 @@ export default function SettingsPage() {
   useEffect(() => {
     if (user && !profileForm.formState.isDirty) {
       profileForm.reset({
-        name: user.name || "",
-        email: user.email || "",
+        name: user.name || '',
+        email: user.email || '',
       });
     }
   }, [user, profileForm]);
@@ -170,7 +170,7 @@ export default function SettingsPage() {
   }
 
   if (error) {
-    toast.error("Failed to load user settings");
+    toast.error('Failed to load user settings');
   }
 
   return (
@@ -179,11 +179,7 @@ export default function SettingsPage() {
         <h1 className="text-3xl font-bold">Settings</h1>
       </div>
 
-      <Tabs
-        defaultValue="profile"
-        value={activeTab}
-        onValueChange={setActiveTab}
-      >
+      <Tabs defaultValue="profile" value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="mb-4">
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="password">Password</TabsTrigger>
@@ -202,10 +198,7 @@ export default function SettingsPage() {
                 <p>Loading profile...</p>
               ) : (
                 <Form {...profileForm}>
-                  <form
-                    onSubmit={profileForm.handleSubmit(onProfileSubmit)}
-                    className="space-y-4"
-                  >
+                  <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-4">
                     <FormField
                       control={profileForm.control}
                       name="name"
@@ -215,9 +208,7 @@ export default function SettingsPage() {
                           <FormControl>
                             <Input placeholder="Your name" {...field} />
                           </FormControl>
-                          <FormDescription>
-                            This is your public display name.
-                          </FormDescription>
+                          <FormDescription>This is your public display name.</FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -242,15 +233,10 @@ export default function SettingsPage() {
 
                     <Button
                       type="submit"
-                      disabled={
-                        updateProfileMutation.isPending ||
-                        !profileForm.formState.isDirty
-                      }
+                      disabled={updateProfileMutation.isPending || !profileForm.formState.isDirty}
                     >
                       <Save className="mr-2 h-4 w-4" />
-                      {updateProfileMutation.isPending
-                        ? "Saving..."
-                        : "Save Changes"}
+                      {updateProfileMutation.isPending ? 'Saving...' : 'Save Changes'}
                     </Button>
                   </form>
                 </Form>
@@ -263,16 +249,11 @@ export default function SettingsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Change Password</CardTitle>
-              <CardDescription>
-                Update your password to keep your account secure
-              </CardDescription>
+              <CardDescription>Update your password to keep your account secure</CardDescription>
             </CardHeader>
             <CardContent>
               <Form {...passwordForm}>
-                <form
-                  onSubmit={passwordForm.handleSubmit(onPasswordSubmit)}
-                  className="space-y-4"
-                >
+                <form onSubmit={passwordForm.handleSubmit(onPasswordSubmit)} className="space-y-4">
                   <FormField
                     control={passwordForm.control}
                     name="currentPassword"
@@ -280,11 +261,7 @@ export default function SettingsPage() {
                       <FormItem>
                         <FormLabel>Current Password</FormLabel>
                         <FormControl>
-                          <Input
-                            type="password"
-                            placeholder="Enter current password"
-                            {...field}
-                          />
+                          <Input type="password" placeholder="Enter current password" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -298,15 +275,9 @@ export default function SettingsPage() {
                       <FormItem>
                         <FormLabel>New Password</FormLabel>
                         <FormControl>
-                          <Input
-                            type="password"
-                            placeholder="Enter new password"
-                            {...field}
-                          />
+                          <Input type="password" placeholder="Enter new password" {...field} />
                         </FormControl>
-                        <FormDescription>
-                          Password must be at least 8 characters.
-                        </FormDescription>
+                        <FormDescription>Password must be at least 8 characters.</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -319,11 +290,7 @@ export default function SettingsPage() {
                       <FormItem>
                         <FormLabel>Confirm Password</FormLabel>
                         <FormControl>
-                          <Input
-                            type="password"
-                            placeholder="Confirm new password"
-                            {...field}
-                          />
+                          <Input type="password" placeholder="Confirm new password" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -332,15 +299,10 @@ export default function SettingsPage() {
 
                   <Button
                     type="submit"
-                    disabled={
-                      updatePasswordMutation.isPending ||
-                      !passwordForm.formState.isDirty
-                    }
+                    disabled={updatePasswordMutation.isPending || !passwordForm.formState.isDirty}
                   >
                     <Save className="mr-2 h-4 w-4" />
-                    {updatePasswordMutation.isPending
-                      ? "Updating..."
-                      : "Update Password"}
+                    {updatePasswordMutation.isPending ? 'Updating...' : 'Update Password'}
                   </Button>
                 </form>
               </Form>
@@ -352,9 +314,7 @@ export default function SettingsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Billing</CardTitle>
-              <CardDescription>
-                Manage your subscription and billing information
-              </CardDescription>
+              <CardDescription>Manage your subscription and billing information</CardDescription>
             </CardHeader>
             <CardContent>
               <p>Billing settings will be available in a future update.</p>
@@ -366,9 +326,7 @@ export default function SettingsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Notifications</CardTitle>
-              <CardDescription>
-                Manage your notification preferences
-              </CardDescription>
+              <CardDescription>Manage your notification preferences</CardDescription>
             </CardHeader>
             <CardContent>
               <p>Notification settings will be available in a future update.</p>
@@ -386,9 +344,7 @@ export default function SettingsPage() {
             <CardContent>
               <div className="space-y-1">
                 <p className="text-sm font-medium">Role: {user.role}</p>
-                <p className="text-sm font-medium">
-                  Subscription: {user.subscription}
-                </p>
+                <p className="text-sm font-medium">Subscription: {user.subscription}</p>
                 <p className="text-sm font-medium">
                   Member since: {new Date(user.createdAt).toLocaleDateString()}
                 </p>

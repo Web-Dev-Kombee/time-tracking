@@ -1,8 +1,8 @@
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { z } from "zod";
-import { authOptions } from "@/lib/auth";
+import { getServerSession } from 'next-auth';
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { z } from 'zod';
+import { authOptions } from '@/lib/auth';
 
 // Schema for validating time entry update data
 const TimeEntryUpdateSchema = z.object({
@@ -15,15 +15,12 @@ const TimeEntryUpdateSchema = z.object({
 });
 
 // GET a specific time entry
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const timeEntry = await prisma.timeEntry.findUnique({
@@ -41,32 +38,23 @@ export async function GET(
     });
 
     if (!timeEntry) {
-      return NextResponse.json(
-        { error: "Time entry not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Time entry not found' }, { status: 404 });
     }
 
     return NextResponse.json(timeEntry);
   } catch (error) {
-    console.error("Error fetching time entry:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch time entry" },
-      { status: 500 }
-    );
+    console.error('Error fetching time entry:', error);
+    return NextResponse.json({ error: 'Failed to fetch time entry' }, { status: 500 });
   }
 }
 
 // PUT to update a time entry
-export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Check if the time entry exists and belongs to the user
@@ -79,7 +67,7 @@ export async function PUT(
 
     if (!existingTimeEntry) {
       return NextResponse.json(
-        { error: "Time entry not found or not authorized" },
+        { error: 'Time entry not found or not authorized' },
         { status: 404 }
       );
     }
@@ -87,11 +75,11 @@ export async function PUT(
     const json = await request.json();
 
     // Convert string dates to Date objects if they're not already
-    if (typeof json.startTime === "string") {
+    if (typeof json.startTime === 'string') {
       json.startTime = new Date(json.startTime);
     }
 
-    if (json.endTime && typeof json.endTime === "string") {
+    if (json.endTime && typeof json.endTime === 'string') {
       json.endTime = new Date(json.endTime);
     }
 
@@ -100,7 +88,7 @@ export async function PUT(
     // Ensure the time entry belongs to the authenticated user
     if (validatedData.userId !== session.user.id) {
       return NextResponse.json(
-        { error: "You can only update your own time entries" },
+        { error: 'You can only update your own time entries' },
         { status: 403 }
       );
     }
@@ -114,10 +102,7 @@ export async function PUT(
     });
 
     if (!project) {
-      return NextResponse.json(
-        { error: "Project not found or not authorized" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Project not found or not authorized' }, { status: 404 });
     }
 
     const updatedTimeEntry = await prisma.timeEntry.update({
@@ -142,31 +127,25 @@ export async function PUT(
 
     return NextResponse.json(updatedTimeEntry);
   } catch (error: any) {
-    if (error.name === "ZodError") {
+    if (error.name === 'ZodError') {
       return NextResponse.json(
-        { error: "Invalid time entry data", details: error.errors },
+        { error: 'Invalid time entry data', details: error.errors },
         { status: 400 }
       );
     }
 
-    console.error("Error updating time entry:", error);
-    return NextResponse.json(
-      { error: "Failed to update time entry" },
-      { status: 500 }
-    );
+    console.error('Error updating time entry:', error);
+    return NextResponse.json({ error: 'Failed to update time entry' }, { status: 500 });
   }
 }
 
 // DELETE a time entry
-export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Check if the time entry exists and belongs to the user
@@ -179,7 +158,7 @@ export async function DELETE(
 
     if (!timeEntry) {
       return NextResponse.json(
-        { error: "Time entry not found or not authorized" },
+        { error: 'Time entry not found or not authorized' },
         { status: 404 }
       );
     }
@@ -191,12 +170,9 @@ export async function DELETE(
       },
     });
 
-    return NextResponse.json({ message: "Time entry deleted successfully" });
+    return NextResponse.json({ message: 'Time entry deleted successfully' });
   } catch (error) {
-    console.error("Error deleting time entry:", error);
-    return NextResponse.json(
-      { error: "Failed to delete time entry" },
-      { status: 500 }
-    );
+    console.error('Error deleting time entry:', error);
+    return NextResponse.json({ error: 'Failed to delete time entry' }, { status: 500 });
   }
 }

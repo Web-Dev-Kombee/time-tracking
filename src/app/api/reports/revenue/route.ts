@@ -1,28 +1,28 @@
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { authOptions } from "@/lib/auth";
+import { getServerSession } from 'next-auth';
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { authOptions } from '@/lib/auth';
 
 export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Get query parameters for time range
     const { searchParams } = new URL(request.url);
-    const startDate = searchParams.get("startDate")
-      ? new Date(searchParams.get("startDate") as string)
+    const startDate = searchParams.get('startDate')
+      ? new Date(searchParams.get('startDate') as string)
       : new Date(new Date().getFullYear(), 0, 1); // Default to start of current year
 
-    const endDate = searchParams.get("endDate")
-      ? new Date(searchParams.get("endDate") as string)
+    const endDate = searchParams.get('endDate')
+      ? new Date(searchParams.get('endDate') as string)
       : new Date(); // Default to today
 
     // Get client ID if filtering by client
-    const clientId = searchParams.get("clientId");
+    const clientId = searchParams.get('clientId');
 
     // Build base filters
     const baseFilter = {
@@ -56,8 +56,7 @@ export async function GET(request: Request) {
 
       const startTime = new Date(entry.startTime);
       const endTime = new Date(entry.endTime);
-      const durationHours =
-        (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
+      const durationHours = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
 
       return total + durationHours * entry.project.hourlyRate;
     }, 0);
@@ -156,7 +155,7 @@ export async function GET(request: Request) {
     });
 
     // Transform client data
-    const clientStats = clientData.map((client) => {
+    const clientStats = clientData.map(client => {
       // Calculate billable time
       const billableTime = client.projects.reduce((clientTotal, project) => {
         return (
@@ -166,8 +165,7 @@ export async function GET(request: Request) {
 
             const startTime = new Date(entry.startTime);
             const endTime = new Date(entry.endTime);
-            const durationHours =
-              (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
+            const durationHours = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
 
             return projectTotal + durationHours * project.hourlyRate;
           }, 0)
@@ -224,10 +222,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json(summary);
   } catch (error) {
-    console.error("Error generating revenue report:", error);
-    return NextResponse.json(
-      { error: "Failed to generate revenue report" },
-      { status: 500 }
-    );
+    console.error('Error generating revenue report:', error);
+    return NextResponse.json({ error: 'Failed to generate revenue report' }, { status: 500 });
   }
 }

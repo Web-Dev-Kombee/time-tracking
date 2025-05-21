@@ -1,8 +1,8 @@
-import { ReactNode } from "react";
-import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { UserRole } from "@/types";
+import { ReactNode } from 'react';
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { UserRole } from '@/types';
 
 interface RoleProtectedPageProps {
   allowedRoles: UserRole[];
@@ -27,12 +27,12 @@ interface RoleProtectedPageProps {
 export default async function RoleProtectedPage({
   allowedRoles,
   children,
-  redirectTo = "/dashboard",
+  redirectTo = '/dashboard',
 }: RoleProtectedPageProps) {
   const session = await getServerSession(authOptions);
 
   if (!session?.user) {
-    redirect("/login");
+    redirect('/login');
   }
 
   const userRole = session?.user.role as UserRole;

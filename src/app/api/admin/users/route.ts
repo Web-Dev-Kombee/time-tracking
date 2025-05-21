@@ -1,17 +1,14 @@
-import { NextResponse } from "next/server";
-import { validateUserRole } from "@/lib/api-auth";
-import { UserRole } from "@/types";
-import { prisma } from "@/lib/prisma";
+import { NextResponse } from 'next/server';
+import { validateUserRole } from '@/lib/api-auth';
+import { UserRole } from '@/types';
+import { prisma } from '@/lib/prisma';
 
 /**
  * GET - Get all users (admin only)
  */
 export async function GET(request: Request) {
   // Validate that the request is coming from an admin user
-  const { session, response } = await validateUserRole([
-    UserRole.SUPER_ADMIN,
-    UserRole.ADMIN,
-  ]);
+  const { session, response } = await validateUserRole([UserRole.SUPER_ADMIN, UserRole.ADMIN]);
   if (!session) return response;
 
   try {
@@ -28,17 +25,14 @@ export async function GET(request: Request) {
         image: true,
       },
       orderBy: {
-        name: "asc",
+        name: 'asc',
       },
     });
 
     return NextResponse.json(users);
   } catch (error) {
-    console.error("Error fetching users:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch users" },
-      { status: 500 }
-    );
+    console.error('Error fetching users:', error);
+    return NextResponse.json({ error: 'Failed to fetch users' }, { status: 500 });
   }
 }
 
@@ -47,22 +41,16 @@ export async function GET(request: Request) {
  */
 export async function POST(request: Request) {
   // Only SUPER_ADMIN can create new admin users
-  const { session, response } = await validateUserRole([
-    UserRole.SUPER_ADMIN,
-    UserRole.ADMIN,
-  ]);
+  const { session, response } = await validateUserRole([UserRole.SUPER_ADMIN, UserRole.ADMIN]);
   if (!session) return response;
 
   try {
     const data = await request.json();
 
     // Additional validation for ADMIN users - they can't create SUPER_ADMIN users
-    if (
-      session.user.role === UserRole.ADMIN &&
-      data.role === UserRole.SUPER_ADMIN
-    ) {
+    if (session.user.role === UserRole.ADMIN && data.role === UserRole.SUPER_ADMIN) {
       return NextResponse.json(
-        { error: "Admin users cannot create super-admin accounts" },
+        { error: 'Admin users cannot create super-admin accounts' },
         { status: 403 }
       );
     }
@@ -87,10 +75,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(user, { status: 201 });
   } catch (error) {
-    console.error("Error creating user:", error);
-    return NextResponse.json(
-      { error: "Failed to create user" },
-      { status: 500 }
-    );
+    console.error('Error creating user:', error);
+    return NextResponse.json({ error: 'Failed to create user' }, { status: 500 });
   }
 }

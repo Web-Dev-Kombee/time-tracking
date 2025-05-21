@@ -1,22 +1,16 @@
-import { NextResponse } from "next/server";
-import { validateUserRole } from "@/lib/api-auth";
-import { UserRole } from "@/types";
-import { prisma } from "@/lib/prisma";
-import { z } from "zod";
+import { NextResponse } from 'next/server';
+import { validateUserRole } from '@/lib/api-auth';
+import { UserRole } from '@/types';
+import { prisma } from '@/lib/prisma';
+import { z } from 'zod';
 
 const UserUpdateSchema = z.object({
   role: z.nativeEnum(UserRole),
 });
 
 // GET - Get a specific user details
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
-  const { session, response } = await validateUserRole([
-    UserRole.SUPER_ADMIN,
-    UserRole.ADMIN,
-  ]);
+export async function GET(request: Request, { params }: { params: { id: string } }) {
+  const { session, response } = await validateUserRole([UserRole.SUPER_ADMIN, UserRole.ADMIN]);
   if (!session) return response;
 
   try {
@@ -35,29 +29,20 @@ export async function GET(
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     return NextResponse.json(user);
   } catch (error) {
-    console.error("Error fetching user:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch user" },
-      { status: 500 }
-    );
+    console.error('Error fetching user:', error);
+    return NextResponse.json({ error: 'Failed to fetch user' }, { status: 500 });
   }
 }
 
 // PATCH - Update a user's role
-export async function PATCH(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   // Only SUPER_ADMIN and ADMIN can update roles
-  const { session, response } = await validateUserRole([
-    UserRole.SUPER_ADMIN,
-    UserRole.ADMIN,
-  ]);
+  const { session, response } = await validateUserRole([UserRole.SUPER_ADMIN, UserRole.ADMIN]);
   if (!session) return response;
 
   try {
@@ -71,7 +56,7 @@ export async function PATCH(
     });
 
     if (!targetUser) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // Additional validation rules:
@@ -79,22 +64,16 @@ export async function PATCH(
     // 2. ADMIN cannot promote users to SUPER_ADMIN
     const currentUserRole = session.user.role as UserRole;
 
-    if (
-      targetUser.role === UserRole.SUPER_ADMIN &&
-      currentUserRole !== UserRole.SUPER_ADMIN
-    ) {
+    if (targetUser.role === UserRole.SUPER_ADMIN && currentUserRole !== UserRole.SUPER_ADMIN) {
       return NextResponse.json(
-        { error: "Only super-admins can modify super-admin accounts" },
+        { error: 'Only super-admins can modify super-admin accounts' },
         { status: 403 }
       );
     }
 
-    if (
-      role === UserRole.SUPER_ADMIN &&
-      currentUserRole !== UserRole.SUPER_ADMIN
-    ) {
+    if (role === UserRole.SUPER_ADMIN && currentUserRole !== UserRole.SUPER_ADMIN) {
       return NextResponse.json(
-        { error: "Only super-admins can create super-admin accounts" },
+        { error: 'Only super-admins can create super-admin accounts' },
         { status: 403 }
       );
     }
@@ -113,27 +92,21 @@ export async function PATCH(
 
     return NextResponse.json(updatedUser);
   } catch (error) {
-    console.error("Error updating user role:", error);
+    console.error('Error updating user role:', error);
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Invalid role value", details: error.errors },
+        { error: 'Invalid role value', details: error.errors },
         { status: 400 }
       );
     }
 
-    return NextResponse.json(
-      { error: "Failed to update user role" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to update user role' }, { status: 500 });
   }
 }
 
 // DELETE - Delete a user
-export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   // Only SUPER_ADMIN can delete users
   const { session, response } = await validateUserRole([UserRole.SUPER_ADMIN]);
   if (!session) return response;
@@ -141,10 +114,7 @@ export async function DELETE(
   try {
     // Prevent self-deletion
     if (params.id === session.user.id) {
-      return NextResponse.json(
-        { error: "Cannot delete your own account" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Cannot delete your own account' }, { status: 400 });
     }
 
     // Check if user exists
@@ -153,7 +123,7 @@ export async function DELETE(
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // Delete the user
@@ -161,15 +131,9 @@ export async function DELETE(
       where: { id: params.id },
     });
 
-    return NextResponse.json(
-      { message: "User deleted successfully" },
-      { status: 200 }
-    );
+    return NextResponse.json({ message: 'User deleted successfully' }, { status: 200 });
   } catch (error) {
-    console.error("Error deleting user:", error);
-    return NextResponse.json(
-      { error: "Failed to delete user" },
-      { status: 500 }
-    );
+    console.error('Error deleting user:', error);
+    return NextResponse.json({ error: 'Failed to delete user' }, { status: 500 });
   }
 }

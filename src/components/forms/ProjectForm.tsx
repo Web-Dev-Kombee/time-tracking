@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -13,21 +13,21 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { toast } from "sonner";
-import { useQuery } from "@tanstack/react-query";
-import { ProjectStatus } from "@/types";
-import { ProjectSchema } from "@/types/schemas";
-import { z } from "zod";
+} from '@/components/ui/select';
+import { toast } from 'sonner';
+import { useQuery } from '@tanstack/react-query';
+import { ProjectStatus } from '@/types';
+import { ProjectSchema } from '@/types/schemas';
+import { z } from 'zod';
 
 type ProjectFormData = z.infer<typeof ProjectSchema>;
 
@@ -37,21 +37,17 @@ interface ProjectFormProps {
   initialData?: ProjectFormData;
 }
 
-export function ProjectForm({
-  userId,
-  projectId,
-  initialData,
-}: ProjectFormProps) {
+export function ProjectForm({ userId, projectId, initialData }: ProjectFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   // Fetch clients for the user
   const { data: clients, isLoading: isLoadingClients } = useQuery({
-    queryKey: ["clients"],
+    queryKey: ['clients'],
     queryFn: async () => {
-      const response = await fetch("/api/clients");
+      const response = await fetch('/api/clients');
       if (!response.ok) {
-        throw new Error("Failed to fetch clients");
+        throw new Error('Failed to fetch clients');
       }
       return response.json();
     },
@@ -61,9 +57,9 @@ export function ProjectForm({
   const form = useForm<ProjectFormData>({
     resolver: zodResolver(ProjectSchema),
     defaultValues: initialData || {
-      name: "",
-      description: "",
-      clientId: "",
+      name: '',
+      description: '',
+      clientId: '',
       status: ProjectStatus.ACTIVE,
       hourlyRate: 0,
     },
@@ -77,7 +73,7 @@ export function ProjectForm({
         try {
           const response = await fetch(`/api/projects/${projectId}`);
           if (!response.ok) {
-            throw new Error("Failed to fetch project");
+            throw new Error('Failed to fetch project');
           }
 
           const data = await response.json();
@@ -85,13 +81,13 @@ export function ProjectForm({
           // Format the data for the form
           form.reset({
             name: data.name,
-            description: data.description || "",
+            description: data.description || '',
             clientId: data.clientId,
             status: data.status,
             hourlyRate: data.hourlyRate,
           });
         } catch (error: any) {
-          toast.error(error.message || "Failed to load project");
+          toast.error(error.message || 'Failed to load project');
         } finally {
           setIsLoading(false);
         }
@@ -116,35 +112,29 @@ export function ProjectForm({
       };
 
       // API endpoint and method based on whether we're creating or updating
-      const endpoint = projectId
-        ? `/api/projects/${projectId}`
-        : "/api/projects";
+      const endpoint = projectId ? `/api/projects/${projectId}` : '/api/projects';
 
-      const method = projectId ? "PUT" : "POST";
+      const method = projectId ? 'PUT' : 'POST';
 
       const response = await fetch(endpoint, {
         method,
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(project),
       });
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "Failed to save project");
+        throw new Error(error.error || 'Failed to save project');
       }
 
-      toast.success(
-        projectId
-          ? "Project updated successfully"
-          : "Project created successfully"
-      );
+      toast.success(projectId ? 'Project updated successfully' : 'Project created successfully');
 
-      router.push("/dashboard/projects");
+      router.push('/dashboard/projects');
       router.refresh();
     } catch (error: any) {
-      toast.error(error.message || "Something went wrong");
+      toast.error(error.message || 'Something went wrong');
     } finally {
       setIsLoading(false);
     }
@@ -160,11 +150,7 @@ export function ProjectForm({
             <FormItem>
               <FormLabel>Project Name</FormLabel>
               <FormControl>
-                <Input
-                  placeholder="Enter project name"
-                  {...field}
-                  disabled={isLoading}
-                />
+                <Input placeholder="Enter project name" {...field} disabled={isLoading} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -181,7 +167,7 @@ export function ProjectForm({
                 <Textarea
                   placeholder="Project description"
                   {...field}
-                  value={field.value || ""}
+                  value={field.value || ''}
                   disabled={isLoading}
                 />
               </FormControl>
@@ -249,7 +235,7 @@ export function ProjectForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {Object.values(ProjectStatus).map((status) => (
+                    {Object.values(ProjectStatus).map(status => (
                       <SelectItem key={status} value={status}>
                         {status.charAt(0) + status.slice(1).toLowerCase()}
                       </SelectItem>
@@ -269,13 +255,7 @@ export function ProjectForm({
             <FormItem>
               <FormLabel>Hourly Rate ($)</FormLabel>
               <FormControl>
-                <Input
-                  type="number"
-                  min="0"
-                  step="0.01"
-                  {...field}
-                  disabled={isLoading}
-                />
+                <Input type="number" min="0" step="0.01" {...field} disabled={isLoading} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -284,7 +264,7 @@ export function ProjectForm({
 
         <Button type="submit" disabled={isLoading} className="w-full">
           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {projectId ? "Update" : "Create"} Project
+          {projectId ? 'Update' : 'Create'} Project
         </Button>
       </form>
     </Form>

@@ -1,25 +1,19 @@
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import Link from "next/link";
-import { Clock, Plus, Filter } from "lucide-react";
-import { prisma } from "@/lib/prisma";
-import { authOptions } from "@/lib/auth";
-import { format } from "date-fns";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { TimeEntry, TimeEntryWithRelations } from "@/types";
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
+import Link from 'next/link';
+import { Clock, Plus, Filter } from 'lucide-react';
+import { prisma } from '@/lib/prisma';
+import { authOptions } from '@/lib/auth';
+import { format } from 'date-fns';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { TimeEntry, TimeEntryWithRelations } from '@/types';
 
 export default async function TimeEntriesPage() {
   const session = await getServerSession(authOptions);
 
   if (!session?.user) {
-    return redirect("/login");
+    return redirect('/login');
   }
 
   // Fetch time entries from the database
@@ -35,7 +29,7 @@ export default async function TimeEntriesPage() {
       },
     },
     orderBy: {
-      startTime: "desc",
+      startTime: 'desc',
     },
   });
 
@@ -52,11 +46,9 @@ export default async function TimeEntriesPage() {
       return {
         ...entry,
         duration,
-        formattedDate: format(startTime, "MMM d, yyyy"),
-        formattedStartTime: format(startTime, "h:mm a"),
-        formattedEndTime: entry.endTime
-          ? format(new Date(entry.endTime), "h:mm a")
-          : "In progress",
+        formattedDate: format(startTime, 'MMM d, yyyy'),
+        formattedStartTime: format(startTime, 'h:mm a'),
+        formattedEndTime: entry.endTime ? format(new Date(entry.endTime), 'h:mm a') : 'In progress',
       };
     }
   );
@@ -66,8 +58,7 @@ export default async function TimeEntriesPage() {
     (acc: number, entry: TimeEntryWithRelations) => {
       const startTime = new Date(entry.startTime);
       const endTime = entry.endTime ? new Date(entry.endTime) : new Date();
-      const durationHours =
-        (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
+      const durationHours = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
       return acc + durationHours;
     },
     0
@@ -128,15 +119,10 @@ export default async function TimeEntriesPage() {
                 <div className="col-span-1 text-right">Actions</div>
               </div>
               <div className="divide-y">
-                {timeEntriesWithDuration.map((entry) => (
-                  <div
-                    key={entry.id}
-                    className="grid grid-cols-12 gap-4 p-4 hover:bg-muted/20"
-                  >
+                {timeEntriesWithDuration.map(entry => (
+                  <div key={entry.id} className="grid grid-cols-12 gap-4 p-4 hover:bg-muted/20">
                     <div className="col-span-5">
-                      <div className="font-medium">
-                        {entry.description || "No description"}
-                      </div>
+                      <div className="font-medium">{entry.description || 'No description'}</div>
                       <div className="text-xs text-muted-foreground">
                         {entry.formattedStartTime} - {entry.formattedEndTime}
                       </div>
@@ -147,9 +133,7 @@ export default async function TimeEntriesPage() {
                         {entry.project.client.name}
                       </div>
                     </div>
-                    <div className="col-span-2 text-sm">
-                      {entry.formattedDate}
-                    </div>
+                    <div className="col-span-2 text-sm">{entry.formattedDate}</div>
                     <div className="col-span-2 text-sm">{entry.duration}</div>
                     <div className="col-span-1 flex justify-end">
                       <Link href={`/dashboard/time/${entry.id}/edit`}>

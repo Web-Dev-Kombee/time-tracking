@@ -1,8 +1,8 @@
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { InvoiceSchema } from "@/types/schemas";
-import { authOptions } from "@/lib/auth";
+import { getServerSession } from 'next-auth';
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { InvoiceSchema } from '@/types/schemas';
+import { authOptions } from '@/lib/auth';
 
 // GET all invoices
 export async function GET(request: Request) {
@@ -10,13 +10,13 @@ export async function GET(request: Request) {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Get query parameters
     const { searchParams } = new URL(request.url);
-    const clientId = searchParams.get("clientId");
-    const status = searchParams.get("status");
+    const clientId = searchParams.get('clientId');
+    const status = searchParams.get('status');
 
     // Build filter conditions
     const where: any = {
@@ -39,17 +39,14 @@ export async function GET(request: Request) {
         payments: true,
       },
       orderBy: {
-        issueDate: "desc",
+        issueDate: 'desc',
       },
     });
 
     return NextResponse.json(invoices);
   } catch (error) {
-    console.error("Error fetching invoices:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch invoices" },
-      { status: 500 }
-    );
+    console.error('Error fetching invoices:', error);
+    return NextResponse.json({ error: 'Failed to fetch invoices' }, { status: 500 });
   }
 }
 
@@ -59,7 +56,7 @@ export async function POST(request: Request) {
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const json = await request.json();
@@ -67,7 +64,7 @@ export async function POST(request: Request) {
 
     // Generate invoice number (format: INV-YYYYMMDD-XXX)
     const date = new Date();
-    const dateStr = date.toISOString().slice(0, 10).replace(/-/g, "");
+    const dateStr = date.toISOString().slice(0, 10).replace(/-/g, '');
 
     // Count today's invoices to generate sequential number
     const todayInvoicesCount = await prisma.invoice.count({
@@ -78,9 +75,7 @@ export async function POST(request: Request) {
       },
     });
 
-    const invoiceNumber = `INV-${dateStr}-${(todayInvoicesCount + 1)
-      .toString()
-      .padStart(3, "0")}`;
+    const invoiceNumber = `INV-${dateStr}-${(todayInvoicesCount + 1).toString().padStart(3, '0')}`;
 
     // Calculate total
     const subtotal = validatedData.items.reduce(
@@ -92,7 +87,7 @@ export async function POST(request: Request) {
     const total = subtotal + tax;
 
     // Create invoice with items in a transaction
-    const invoice = await prisma.$transaction(async (tx) => {
+    const invoice = await prisma.$transaction(async tx => {
       // Create the invoice
       const newInvoice = await tx.invoice.create({
         data: {
@@ -107,7 +102,7 @@ export async function POST(request: Request) {
           tax,
           total,
           items: {
-            create: validatedData.items.map((item) => ({
+            create: validatedData.items.map(item => ({
               description: item.description,
               quantity: item.quantity,
               unitPrice: item.unitPrice,
@@ -128,17 +123,14 @@ export async function POST(request: Request) {
 
     return NextResponse.json(invoice, { status: 201 });
   } catch (error: any) {
-    if (error.name === "ZodError") {
+    if (error.name === 'ZodError') {
       return NextResponse.json(
-        { error: "Invalid invoice data", details: error.errors },
+        { error: 'Invalid invoice data', details: error.errors },
         { status: 400 }
       );
     }
 
-    console.error("Error creating invoice:", error);
-    return NextResponse.json(
-      { error: "Failed to create invoice" },
-      { status: 500 }
-    );
+    console.error('Error creating invoice:', error);
+    return NextResponse.json({ error: 'Failed to create invoice' }, { status: 500 });
   }
 }

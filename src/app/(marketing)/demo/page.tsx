@@ -1,11 +1,11 @@
-import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 export const metadata = {
-  title: "Demo - TimeTracker",
-  description: "See TimeTracker in action with our interactive demo",
+  title: 'Demo - TimeTracker',
+  description: 'See TimeTracker in action with our interactive demo',
 };
 
 export default function DemoPage() {
@@ -16,8 +16,7 @@ export default function DemoPage() {
           See TimeTracker in Action
         </h1>
         <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-          Explore our key features and see how TimeTracker can streamline your
-          workflow
+          Explore our key features and see how TimeTracker can streamline your workflow
         </p>
       </div>
 
@@ -25,9 +24,7 @@ export default function DemoPage() {
         <div className="aspect-video w-full bg-muted rounded-lg overflow-hidden relative mb-4 flex items-center justify-center">
           <div className="text-center">
             <p className="text-lg font-medium mb-4">Demo Video</p>
-            <p className="text-muted-foreground">
-              Interactive demo video placeholder
-            </p>
+            <p className="text-muted-foreground">Interactive demo video placeholder</p>
           </div>
         </div>
         <div className="flex justify-center">
@@ -51,13 +48,10 @@ export default function DemoPage() {
           <TabsContent value="time-tracking" className="mt-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div>
-                <h3 className="text-2xl font-bold mb-4">
-                  Effortless Time Tracking
-                </h3>
+                <h3 className="text-2xl font-bold mb-4">Effortless Time Tracking</h3>
                 <p className="text-muted-foreground mb-6">
-                  Track time with a single click. Add detailed notes, categorize
-                  by client or project, and monitor your productivity in
-                  real-time.
+                  Track time with a single click. Add detailed notes, categorize by client or
+                  project, and monitor your productivity in real-time.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center">
@@ -79,9 +73,7 @@ export default function DemoPage() {
                 </ul>
               </div>
               <div className="bg-muted rounded-lg p-4 h-[300px] flex items-center justify-center">
-                <p className="text-muted-foreground">
-                  Time tracking interface screenshot
-                </p>
+                <p className="text-muted-foreground">Time tracking interface screenshot</p>
               </div>
             </div>
           </TabsContent>
@@ -91,9 +83,8 @@ export default function DemoPage() {
               <div>
                 <h3 className="text-2xl font-bold mb-4">Project Management</h3>
                 <p className="text-muted-foreground mb-6">
-                  Create projects, set budgets, track deadlines, and monitor
-                  progress. Assign team members and keep everyone on the same
-                  page.
+                  Create projects, set budgets, track deadlines, and monitor progress. Assign team
+                  members and keep everyone on the same page.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center">
@@ -115,9 +106,7 @@ export default function DemoPage() {
                 </ul>
               </div>
               <div className="bg-muted rounded-lg p-4 h-[300px] flex items-center justify-center">
-                <p className="text-muted-foreground">
-                  Project management interface screenshot
-                </p>
+                <p className="text-muted-foreground">Project management interface screenshot</p>
               </div>
             </div>
           </TabsContent>
@@ -127,9 +116,8 @@ export default function DemoPage() {
               <div>
                 <h3 className="text-2xl font-bold mb-4">Powerful Reporting</h3>
                 <p className="text-muted-foreground mb-6">
-                  Generate insightful reports to analyze time usage, project
-                  profitability, team productivity, and more. Export to various
-                  formats.
+                  Generate insightful reports to analyze time usage, project profitability, team
+                  productivity, and more. Export to various formats.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center">
@@ -151,9 +139,7 @@ export default function DemoPage() {
                 </ul>
               </div>
               <div className="bg-muted rounded-lg p-4 h-[300px] flex items-center justify-center">
-                <p className="text-muted-foreground">
-                  Reports interface screenshot
-                </p>
+                <p className="text-muted-foreground">Reports interface screenshot</p>
               </div>
             </div>
           </TabsContent>
@@ -163,9 +149,8 @@ export default function DemoPage() {
               <div>
                 <h3 className="text-2xl font-bold mb-4">Seamless Invoicing</h3>
                 <p className="text-muted-foreground mb-6">
-                  Create professional invoices from tracked time and expenses.
-                  Customize templates, set payment terms, and accept online
-                  payments.
+                  Create professional invoices from tracked time and expenses. Customize templates,
+                  set payment terms, and accept online payments.
                 </p>
                 <ul className="space-y-2">
                   <li className="flex items-center">
@@ -187,9 +172,7 @@ export default function DemoPage() {
                 </ul>
               </div>
               <div className="bg-muted rounded-lg p-4 h-[300px] flex items-center justify-center">
-                <p className="text-muted-foreground">
-                  Invoicing interface screenshot
-                </p>
+                <p className="text-muted-foreground">Invoicing interface screenshot</p>
               </div>
             </div>
           </TabsContent>
@@ -210,9 +193,7 @@ export default function DemoPage() {
               <span className="text-primary font-bold">1</span>
             </div>
             <h3 className="font-medium mb-2">Create an account</h3>
-            <p className="text-sm text-muted-foreground">
-              Sign up for free in less than a minute
-            </p>
+            <p className="text-sm text-muted-foreground">Sign up for free in less than a minute</p>
           </div>
 
           <div className="flex flex-col items-center text-center">
@@ -220,9 +201,7 @@ export default function DemoPage() {
               <span className="text-primary font-bold">2</span>
             </div>
             <h3 className="font-medium mb-2">Set up your workspace</h3>
-            <p className="text-sm text-muted-foreground">
-              Add your clients and projects
-            </p>
+            <p className="text-sm text-muted-foreground">Add your clients and projects</p>
           </div>
 
           <div className="flex flex-col items-center text-center">
@@ -230,9 +209,7 @@ export default function DemoPage() {
               <span className="text-primary font-bold">3</span>
             </div>
             <h3 className="font-medium mb-2">Start tracking time</h3>
-            <p className="text-sm text-muted-foreground">
-              Begin tracking your hours immediately
-            </p>
+            <p className="text-sm text-muted-foreground">Begin tracking your hours immediately</p>
           </div>
         </div>
 

@@ -1,24 +1,18 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { Calendar, Download, BarChart4 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { Calendar, Download, BarChart4 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   BarChart,
   Bar,
@@ -31,20 +25,16 @@ import {
   PieChart,
   Pie,
   Cell,
-} from "recharts";
+} from 'recharts';
 
 // Fetch revenue report function
-async function fetchRevenueReport(
-  startDate?: string,
-  endDate?: string,
-  clientId?: string
-) {
-  let url = "/api/reports/revenue";
+async function fetchRevenueReport(startDate?: string, endDate?: string, clientId?: string) {
+  let url = '/api/reports/revenue';
   const params = new URLSearchParams();
 
-  if (startDate) params.append("startDate", startDate);
-  if (endDate) params.append("endDate", endDate);
-  if (clientId) params.append("clientId", clientId);
+  if (startDate) params.append('startDate', startDate);
+  if (endDate) params.append('endDate', endDate);
+  if (clientId) params.append('clientId', clientId);
 
   if (params.toString()) {
     url += `?${params.toString()}`;
@@ -53,32 +43,32 @@ async function fetchRevenueReport(
   const res = await fetch(url);
 
   if (!res.ok) {
-    throw new Error("Failed to fetch revenue report");
+    throw new Error('Failed to fetch revenue report');
   }
 
   return res.json();
 }
 
 export default function RevenueReportPage() {
-  const [timeRange, setTimeRange] = useState("month");
-  const [selectedClient, setSelectedClient] = useState("");
+  const [timeRange, setTimeRange] = useState('month');
+  const [selectedClient, setSelectedClient] = useState('');
 
   // Calculate date range based on selected time range
   const getDateRange = () => {
     const now = new Date();
-    let startDate = new Date();
+    const startDate = new Date();
 
     switch (timeRange) {
-      case "week":
+      case 'week':
         startDate.setDate(now.getDate() - 7);
         break;
-      case "month":
+      case 'month':
         startDate.setMonth(now.getMonth() - 1);
         break;
-      case "quarter":
+      case 'quarter':
         startDate.setMonth(now.getMonth() - 3);
         break;
-      case "year":
+      case 'year':
         startDate.setFullYear(now.getFullYear() - 1);
         break;
       default:
@@ -86,8 +76,8 @@ export default function RevenueReportPage() {
     }
 
     return {
-      startDate: startDate.toISOString().split("T")[0],
-      endDate: now.toISOString().split("T")[0],
+      startDate: startDate.toISOString().split('T')[0],
+      endDate: now.toISOString().split('T')[0],
     };
   };
 
@@ -99,13 +89,12 @@ export default function RevenueReportPage() {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["revenueReport", startDate, endDate, selectedClient],
-    queryFn: () =>
-      fetchRevenueReport(startDate, endDate, selectedClient || undefined),
+    queryKey: ['revenueReport', startDate, endDate, selectedClient],
+    queryFn: () => fetchRevenueReport(startDate, endDate, selectedClient || undefined),
   });
 
   if (error) {
-    toast.error("Failed to load revenue report");
+    toast.error('Failed to load revenue report');
   }
 
   // Prepare chart data for client comparison
@@ -122,21 +111,21 @@ export default function RevenueReportPage() {
   const pieChartData = report
     ? [
         {
-          name: "Billable Time",
+          name: 'Billable Time',
           value: report.billableAmount,
-          color: "#4f46e5",
+          color: '#4f46e5',
         },
-        { name: "Expenses", value: report.billableExpenses, color: "#10b981" },
+        { name: 'Expenses', value: report.billableExpenses, color: '#10b981' },
         {
-          name: "Outstanding",
+          name: 'Outstanding',
           value: report.outstandingTotal,
-          color: "#f59e0b",
+          color: '#f59e0b',
         },
       ]
     : [];
 
   // COLORS for pie chart
-  const COLORS = ["#4f46e5", "#10b981", "#f59e0b", "#ef4444"];
+  const COLORS = ['#4f46e5', '#10b981', '#f59e0b', '#ef4444'];
 
   return (
     <div className="container mx-auto py-6">
@@ -192,45 +181,31 @@ export default function RevenueReportPage() {
           <div className="grid gap-6 grid-cols-1 md:grid-cols-4 mb-6">
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Billable Amount
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">Billable Amount</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">
-                  ${report.billableAmount.toFixed(2)}
-                </div>
+                <div className="text-2xl font-bold">${report.billableAmount.toFixed(2)}</div>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Billable Expenses
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">Billable Expenses</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">
-                  ${report.billableExpenses.toFixed(2)}
-                </div>
+                <div className="text-2xl font-bold">${report.billableExpenses.toFixed(2)}</div>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Total Invoiced
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">Total Invoiced</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">
-                  ${report.invoicedTotal.toFixed(2)}
-                </div>
+                <div className="text-2xl font-bold">${report.invoicedTotal.toFixed(2)}</div>
               </CardContent>
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Total Paid
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">Total Paid</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-green-600">
@@ -248,9 +223,7 @@ export default function RevenueReportPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Revenue By Client</CardTitle>
-                <CardDescription>
-                  Comparison of client revenue for the period
-                </CardDescription>
+                <CardDescription>Comparison of client revenue for the period</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-80">
@@ -267,21 +240,11 @@ export default function RevenueReportPage() {
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="name" />
                       <YAxis />
-                      <Tooltip
-                        formatter={(value) => `$${Number(value).toFixed(2)}`}
-                      />
+                      <Tooltip formatter={value => `$${Number(value).toFixed(2)}`} />
                       <Legend />
-                      <Bar
-                        dataKey="billable"
-                        name="Billable Time"
-                        fill="#4f46e5"
-                      />
+                      <Bar dataKey="billable" name="Billable Time" fill="#4f46e5" />
                       <Bar dataKey="expenses" name="Expenses" fill="#10b981" />
-                      <Bar
-                        dataKey="outstanding"
-                        name="Outstanding"
-                        fill="#f59e0b"
-                      />
+                      <Bar dataKey="outstanding" name="Outstanding" fill="#f59e0b" />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -291,9 +254,7 @@ export default function RevenueReportPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Revenue Breakdown</CardTitle>
-                <CardDescription>
-                  Distribution of revenue sources
-                </CardDescription>
+                <CardDescription>Distribution of revenue sources</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-80">
@@ -304,9 +265,7 @@ export default function RevenueReportPage() {
                         cx="50%"
                         cy="50%"
                         labelLine={false}
-                        label={({ name, percent }) =>
-                          `${name}: ${(percent * 100).toFixed(0)}%`
-                        }
+                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                         outerRadius={80}
                         fill="#8884d8"
                         dataKey="value"
@@ -318,9 +277,7 @@ export default function RevenueReportPage() {
                           />
                         ))}
                       </Pie>
-                      <Tooltip
-                        formatter={(value) => `$${Number(value).toFixed(2)}`}
-                      />
+                      <Tooltip formatter={value => `$${Number(value).toFixed(2)}`} />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
@@ -348,23 +305,16 @@ export default function RevenueReportPage() {
                   </thead>
                   <tbody>
                     {report.clientStats.map((client: any) => (
-                      <tr
-                        key={client.id}
-                        className="border-b hover:bg-muted/50"
-                      >
+                      <tr key={client.id} className="border-b hover:bg-muted/50">
                         <td className="py-3 px-4">{client.name}</td>
                         <td className="py-3 px-4 text-right">
                           ${client.billableAmount.toFixed(2)}
                         </td>
-                        <td className="py-3 px-4 text-right">
-                          ${client.expenses.toFixed(2)}
-                        </td>
+                        <td className="py-3 px-4 text-right">${client.expenses.toFixed(2)}</td>
                         <td className="py-3 px-4 text-right">
                           ${client.invoicedAmount.toFixed(2)}
                         </td>
-                        <td className="py-3 px-4 text-right">
-                          ${client.paidAmount.toFixed(2)}
-                        </td>
+                        <td className="py-3 px-4 text-right">${client.paidAmount.toFixed(2)}</td>
                         <td className="py-3 px-4 text-right">
                           ${client.outstandingAmount.toFixed(2)}
                         </td>
@@ -374,18 +324,12 @@ export default function RevenueReportPage() {
                   <tfoot>
                     <tr className="bg-muted">
                       <th className="py-3 px-4 text-left">Total</th>
-                      <th className="py-3 px-4 text-right">
-                        ${report.billableAmount.toFixed(2)}
-                      </th>
+                      <th className="py-3 px-4 text-right">${report.billableAmount.toFixed(2)}</th>
                       <th className="py-3 px-4 text-right">
                         ${report.billableExpenses.toFixed(2)}
                       </th>
-                      <th className="py-3 px-4 text-right">
-                        ${report.invoicedTotal.toFixed(2)}
-                      </th>
-                      <th className="py-3 px-4 text-right">
-                        ${report.paidTotal.toFixed(2)}
-                      </th>
+                      <th className="py-3 px-4 text-right">${report.invoicedTotal.toFixed(2)}</th>
+                      <th className="py-3 px-4 text-right">${report.paidTotal.toFixed(2)}</th>
                       <th className="py-3 px-4 text-right">
                         ${report.outstandingTotal.toFixed(2)}
                       </th>
