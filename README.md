@@ -12,6 +12,8 @@ A full-featured time tracking and billing application built with **Next.js 14**,
 - 💰 **Invoice Generation**: Create professional invoices from tracked time.
 - 📱 **Responsive Design**: Seamless experience across all devices.
 - 🔒 **Role-Based Access Control**: Secure permission system with multiple user roles.
+- 📊 **Revenue Reporting**: Generate detailed financial reports.
+- 🔄 **Activity Feed**: Track all system activities in real-time.
 
 ---
 
@@ -31,10 +33,11 @@ src/
 ├── lib/                  # Utility functions, libs
 │   ├── auth.ts           # Auth configuration
 │   ├── prisma.ts         # Prisma client instance
+│   ├── rbac.ts           # Role-based access control
 │   └── utils.ts          # Utility functions
 ├── constants/            # Application constants
 ├── providers/            # React context providers
-└── types/                # TypeScript types
+└── types/                # TypeScript types & interfaces
 ```
 
 ---
@@ -49,7 +52,27 @@ src/
 - **Form Handling**: React Hook Form + Zod validation
 - **State Management**: React Query, Zustand
 - **Notifications**: Sonner
-- **Code Quality**: ESLint, Prettier, Husky, lint-staged, Commitlint
+- **Code Quality**: ESLint, Prettier, TypeScript strict mode
+
+---
+
+## 🧩 **Type System**
+
+We've implemented a comprehensive type system that:
+
+- Uses TypeScript's advanced features like generics, interfaces, and type guards
+- Provides domain-specific interfaces for all data models
+- Ensures type safety across API boundaries
+- Implements specialized types for different data views
+- Optimizes type definitions with inheritance, Omit, Pick, and type unions
+
+Key type namespaces include:
+
+- Base entity interfaces
+- Relation-extended types
+- Activity tracking types
+- Reporting interfaces
+- Auth and user role types
 
 ---
 
@@ -59,25 +82,20 @@ This project uses several tools to ensure code quality and consistency:
 
 - **ESLint**: Enforces code quality and style rules
 - **Prettier**: Ensures consistent code formatting
+- **TypeScript**: Set to strict mode for maximum type safety
 - **Husky**: Runs checks before commits are made
 - **lint-staged**: Runs linters on staged files only
-- **Commitlint**: Ensures commit messages follow conventions
 
-### Commit Message Format
+### Development Approach
 
-We follow the [Conventional Commits](https://www.conventionalcommits.org/) standard:
+We follow these best practices:
 
-```
-<type>(<scope>): <description>
-
-[optional body]
-
-[optional footer(s)]
-```
-
-Types include: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`
-
-Example: `feat(clients): add client creation form`
+- Type-safe data fetching with typed API responses
+- Proper error handling and validation
+- React Query for efficient data management
+- Functional component patterns
+- Composition over inheritance
+- Interface segregation for specific data views
 
 ---
 
@@ -136,6 +154,12 @@ Example: `feat(clients): add client creation form`
 
 ## 🧪 **Testing**
 
+- Run TypeScript checks:
+
+  ```bash
+  npm run type-check
+  ```
+
 - Run tests:
 
   ```bash
@@ -186,6 +210,7 @@ TimeTrack implements role-based access control with the following roles:
 - **ACCOUNTS**: Access to financial and invoice features
 - **SALES**: Client and project management access
 - **EMPLOYEE**: Basic time tracking access
+- **USER**: Limited access for basic functionalities
 
 ---
 
@@ -195,7 +220,8 @@ We welcome contributions! Follow these steps to contribute:
 
 1. Fork the repository.
 2. Create a new branch for your feature/fix.
-3. Commit changes and open a **Pull Request**.
+3. Ensure all TypeScript checks pass with `npm run type-check`.
+4. Commit changes and open a **Pull Request**.
 
 ---
 
