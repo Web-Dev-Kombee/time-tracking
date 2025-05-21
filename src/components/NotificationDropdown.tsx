@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import Link from "next/link";
-import { Bell, X, Check, Clock, AlertTriangle, CreditCard } from "lucide-react";
+import { Bell, Check, Clock, AlertTriangle, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
  DropdownMenu,
@@ -15,8 +15,28 @@ import {
  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+// Define notification types
+interface Notification {
+ id: string;
+ title: string;
+ message: string;
+ type: string;
+ read: boolean;
+ createdAt: string;
+ invoiceId?: string;
+ timeEntryId?: string;
+}
+
+interface NotificationsResponse {
+ notifications: Notification[];
+ counts: {
+  total: number;
+  unread: number;
+ };
+}
+
 // Fetch notifications function
-async function fetchNotifications() {
+async function fetchNotifications(): Promise<NotificationsResponse> {
  const res = await fetch("/api/notifications");
 
  if (!res.ok) {
@@ -27,7 +47,7 @@ async function fetchNotifications() {
 }
 
 // Mark notifications as read function
-async function markNotificationsAsRead(notificationIds: string[]) {
+async function markNotificationsAsRead(notificationIds: string[]): Promise<{ success: boolean }> {
  const res = await fetch("/api/notifications", {
   method: "POST",
   headers: {
@@ -67,7 +87,7 @@ export function NotificationDropdown() {
  // Handle mark all as read
  const handleMarkAllAsRead = () => {
   if (data?.notifications && data.notifications.length > 0) {
-   const notificationIds = data.notifications.map((notification: any) => notification.id);
+   const notificationIds = data.notifications.map(notification => notification.id);
    markAsReadMutation.mutate(notificationIds);
   }
  };
@@ -89,7 +109,7 @@ export function NotificationDropdown() {
  };
 
  // Get notification route based on type
- const getNotificationRoute = (notification: any) => {
+ const getNotificationRoute = (notification: Notification) => {
   switch (notification.type) {
    case "overdue_invoice":
    case "upcoming_invoice":
@@ -136,7 +156,7 @@ export function NotificationDropdown() {
        Failed to load notifications.
       </div>
      ) : data?.notifications && data.notifications.length > 0 ? (
-      data.notifications.slice(0, 10).map((notification: any) => (
+      data.notifications.slice(0, 10).map(notification => (
        <DropdownMenuItem key={notification.id} asChild>
         <Link
          href={getNotificationRoute(notification)}

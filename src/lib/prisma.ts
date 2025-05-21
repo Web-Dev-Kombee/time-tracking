@@ -1,9 +1,12 @@
-// PrismaClient is not available as a TypeScript import in some environments
-// Using require to avoid TypeScript errors
-const { PrismaClient } = require("@prisma/client");
+import { PrismaClient } from "@prisma/client";
+
+// Define a proper type for the global Prisma instance
+type GlobalWithPrisma = typeof globalThis & {
+ prisma?: PrismaClient;
+};
 
 // Prevent multiple instances of Prisma Client in development
-const globalForPrisma = global as unknown as { prisma: any };
+const globalForPrisma: GlobalWithPrisma = global as unknown as GlobalWithPrisma;
 
 export const prisma =
  globalForPrisma.prisma ||

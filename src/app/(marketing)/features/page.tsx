@@ -1,4 +1,5 @@
 import { CheckCircle2 } from "lucide-react";
+import Link from "next/link";
 
 export const metadata = {
  title: "Features - TimeTracker",
@@ -143,18 +144,18 @@ export default function FeaturesPage() {
      Join thousands of professionals who use TimeTracker to streamline their workflow.
     </p>
     <div className="flex gap-4 justify-center">
-     <a
+     <Link
       href="/api/auth/signup"
       className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90"
      >
       Start for free
-     </a>
-     <a
+     </Link>
+     <Link
       href="/demo"
       className="inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-8 text-sm font-medium shadow-sm hover:bg-accent hover:text-accent-foreground"
      >
       View demo
-     </a>
+     </Link>
     </div>
    </div>
   </div>

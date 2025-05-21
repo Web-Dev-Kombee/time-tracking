@@ -1,5 +1,6 @@
 import { CheckCircle2, HelpCircle } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import Link from "next/link";
 
 export const metadata = {
  title: "Pricing - TimeTracker",
@@ -35,12 +36,12 @@ export default function PricingPage() {
       <PricingFeature>Single user</PricingFeature>
      </ul>
      <div className="mt-auto">
-      <a
+      <Link
        href="/api/auth/signup"
        className="block w-full py-2 px-4 text-center rounded-md bg-primary font-medium text-primary-foreground hover:bg-primary/90"
       >
        Get started
-      </a>
+      </Link>
      </div>
     </div>
 
@@ -69,12 +70,12 @@ export default function PricingPage() {
       <PricingFeature>Up to 5 team members</PricingFeature>
      </ul>
      <div className="mt-auto">
-      <a
+      <Link
        href="/api/auth/signup?plan=pro"
        className="block w-full py-2 px-4 text-center rounded-md bg-primary font-medium text-primary-foreground hover:bg-primary/90"
       >
        Start free trial
-      </a>
+      </Link>
      </div>
     </div>
 
@@ -98,12 +99,12 @@ export default function PricingPage() {
       <PricingFeature>Priority support</PricingFeature>
      </ul>
      <div className="mt-auto">
-      <a
+      <Link
        href="/api/auth/signup?plan=business"
        className="block w-full py-2 px-4 text-center rounded-md bg-primary font-medium text-primary-foreground hover:bg-primary/90"
       >
        Start free trial
-      </a>
+      </Link>
      </div>
     </div>
    </div>
@@ -127,12 +128,12 @@ export default function PricingPage() {
      </ul>
     </div>
     <div className="mt-6">
-     <a
+     <Link
       href="/contact?type=enterprise"
       className="inline-flex py-2 px-4 rounded-md bg-background border font-medium hover:bg-accent hover:text-accent-foreground"
      >
       Contact sales
-     </a>
+     </Link>
     </div>
    </div>
 
