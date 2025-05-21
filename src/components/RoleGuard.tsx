@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { ReactNode } from 'react';
-import { useSession } from 'next-auth/react';
-import { UserRole } from '@/types';
+import { ReactNode } from "react";
+import { useSession } from "next-auth/react";
+import { UserRole } from "@/types";
 
 interface RoleGuardProps {
-  allowedRoles: UserRole[];
-  children: ReactNode;
-  fallback?: ReactNode;
+ allowedRoles: UserRole[];
+ children: ReactNode;
+ fallback?: ReactNode;
 }
 
 /**
@@ -19,19 +19,19 @@ interface RoleGuardProps {
  * </RoleGuard>
  */
 export default function RoleGuard({ allowedRoles, children, fallback = null }: RoleGuardProps) {
-  const { data: session, status } = useSession();
-  const userRole = session?.user?.role as UserRole;
+ const { data: session, status } = useSession();
+ const userRole = session?.user?.role as UserRole;
 
-  // While loading, show nothing
-  if (status === 'loading') {
-    return null;
-  }
+ // While loading, show nothing
+ if (status === "loading") {
+  return null;
+ }
 
-  // If not authenticated or doesn't have required role, show fallback
-  if (!session || !allowedRoles.includes(userRole)) {
-    return <>{fallback}</>;
-  }
+ // If not authenticated or doesn't have required role, show fallback
+ if (!session || !allowedRoles.includes(userRole)) {
+  return <>{fallback}</>;
+ }
 
-  // User has required role, show children
-  return <>{children}</>;
+ // User has required role, show children
+ return <>{children}</>;
 }

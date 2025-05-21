@@ -1,13 +1,13 @@
-import { ReactNode } from 'react';
-import { redirect } from 'next/navigation';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { UserRole } from '@/types';
+import { ReactNode } from "react";
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { UserRole } from "@/types";
 
 interface RoleProtectedPageProps {
-  allowedRoles: UserRole[];
-  children: ReactNode;
-  redirectTo?: string;
+ allowedRoles: UserRole[];
+ children: ReactNode;
+ redirectTo?: string;
 }
 
 /**
@@ -25,21 +25,21 @@ interface RoleProtectedPageProps {
  * }
  */
 export default async function RoleProtectedPage({
-  allowedRoles,
-  children,
-  redirectTo = '/dashboard',
+ allowedRoles,
+ children,
+ redirectTo = "/dashboard",
 }: RoleProtectedPageProps) {
-  const session = await getServerSession(authOptions);
+ const session = await getServerSession(authOptions);
 
-  if (!session?.user) {
-    redirect('/login');
-  }
+ if (!session?.user) {
+  redirect("/login");
+ }
 
-  const userRole = session?.user.role as UserRole;
+ const userRole = session?.user.role as UserRole;
 
-  if (!allowedRoles.includes(userRole)) {
-    redirect(redirectTo);
-  }
+ if (!allowedRoles.includes(userRole)) {
+  redirect(redirectTo);
+ }
 
-  return <>{children}</>;
+ return <>{children}</>;
 }
