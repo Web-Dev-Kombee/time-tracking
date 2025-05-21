@@ -17,11 +17,9 @@ const eslintConfig = [
             "@typescript-eslint/no-empty-object-type": "error",
             "@typescript-eslint/no-require-imports": "error",
             "@next/next/no-html-link-for-pages": "error",
-
-            // Rules that still need work and are temporarily warnings
-            "@typescript-eslint/no-explicit-any": "warn",
-            "@typescript-eslint/no-unused-vars": "warn",
-            "react/no-unescaped-entities": "warn"
+            "@typescript-eslint/no-unused-vars": "error",
+            "@typescript-eslint/no-explicit-any": "error",
+            "react/no-unescaped-entities": "error"
         }
     }
 ];

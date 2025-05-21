@@ -20,41 +20,44 @@ import { UserRole } from "@/types";
  * }
  */
 export async function validateUserRole(requiredRoles: UserRole[]) {
- const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
 
- if (!session?.user) {
-  return {
-   session: null,
-   response: NextResponse.json({ error: "Unauthorized: Not authenticated" }, { status: 401 }),
-  };
- }
+  if (!session?.user) {
+    return {
+      session: null,
+      response: NextResponse.json({ error: "Unauthorized: Not authenticated" }, { status: 401 }),
+    };
+  }
 
- const userRole = session.user.role as UserRole;
+  const userRole = session.user.role as UserRole;
 
- if (!requiredRoles.includes(userRole)) {
-  return {
-   session: null,
-   response: NextResponse.json({ error: "Forbidden: Insufficient permissions" }, { status: 403 }),
-  };
- }
+  if (!requiredRoles.includes(userRole)) {
+    return {
+      session: null,
+      response: NextResponse.json(
+        { error: "Forbidden: Insufficient permissions" },
+        { status: 403 }
+      ),
+    };
+  }
 
- return { session, response: null };
+  return { session, response: null };
 }
 
 /**
  * Check if the current user can modify a resource created by the given user ID
  * Only allows SUPER_ADMIN, ADMIN or the original creator
  */
-export function canModifyResource(session: any, resourceCreatorId: string): boolean {
- if (!session?.user) return false;
+// export function canModifyResource(session: any, resourceCreatorId: string): boolean {
+//  if (!session?.user) return false;
 
- const userRole = session.user.role as UserRole;
+//  const userRole = session.user.role as UserRole;
 
- // Super admins and admins can modify any resource
- if (userRole === UserRole.SUPER_ADMIN || userRole === UserRole.ADMIN) {
-  return true;
- }
+//  // Super admins and admins can modify any resource
+//  if (userRole === UserRole.SUPER_ADMIN || userRole === UserRole.ADMIN) {
+//   return true;
+//  }
 
- // Otherwise, only the creator can modify their own resources
- return session.user.id === resourceCreatorId;
-}
+//  // Otherwise, only the creator can modify their own resources
+//  return session.user.id === resourceCreatorId;
+// }
