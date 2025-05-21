@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import bcrypt from "bcrypt";
 import { UserSchema } from "@/types/schemas";
+import bcrypt from "bcrypt";
+import { NextResponse } from "next/server";
 import { z } from "zod";
 
 const RegisterSchema = UserSchema.extend({

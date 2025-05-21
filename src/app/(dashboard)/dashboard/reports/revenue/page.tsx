@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ClientStats, RevenueReport } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { Calendar, Download } from "lucide-react";
 import { useState } from "react";
@@ -26,26 +27,6 @@ import {
   YAxis,
 } from "recharts";
 import { toast } from "sonner";
-
-// Define TypeScript interfaces
-interface ClientStats {
-  id: string;
-  name: string;
-  billableAmount: number;
-  expenses: number;
-  paidAmount: number;
-  outstandingAmount: number;
-  invoicedAmount: number;
-}
-
-interface RevenueReport {
-  billableAmount: number;
-  billableExpenses: number;
-  invoicedTotal: number;
-  paidTotal: number;
-  outstandingTotal: number;
-  clientStats: ClientStats[];
-}
 
 // Fetch revenue report function
 async function fetchRevenueReport(

@@ -19,31 +19,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ExpenseWithDetails, Project } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { Calendar, Filter, Plus } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
 // Define TypeScript interfaces
-interface Client {
-  id: string;
-  name: string;
-}
-
-interface Project {
-  id: string;
-  name: string;
-  client: Client;
-}
-
-interface Expense {
-  id: string;
-  date: string;
-  description: string;
-  amount: number;
-  billable: boolean;
-  project: Project;
-}
 
 // Fetch expenses function
 async function fetchExpenses(
@@ -51,7 +33,7 @@ async function fetchExpenses(
   startDate?: string,
   endDate?: string,
   billable?: string
-): Promise<Expense[]> {
+): Promise<ExpenseWithDetails[]> {
   let url = "/api/expenses";
   const params = new URLSearchParams();
 
@@ -166,10 +148,10 @@ export default function ExpensesPage() {
 
   // Calculate totals
   const totalAmount =
-    expenses?.reduce((sum: number, expense: Expense) => sum + expense.amount, 0) || 0;
+    expenses?.reduce((sum: number, expense: ExpenseWithDetails) => sum + expense.amount, 0) || 0;
   const billableAmount =
     expenses?.reduce(
-      (sum: number, expense: Expense) => (expense.billable ? sum + expense.amount : sum),
+      (sum: number, expense: ExpenseWithDetails) => (expense.billable ? sum + expense.amount : sum),
       0
     ) || 0;
   const nonBillableAmount = totalAmount - billableAmount;
@@ -351,7 +333,7 @@ export default function ExpensesPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {expenses.map((expense: Expense) => (
+                  {expenses.map((expense: ExpenseWithDetails) => (
                     <tr key={expense.id} className="border-b hover:bg-muted/50">
                       <td className="py-3 px-4">{new Date(expense.date).toLocaleDateString()}</td>
                       <td className="py-3 px-4">{expense.description}</td>

@@ -1,16 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { UserSchema } from "@/types/schemas";
-import { z } from "zod";
-import { Clock, Loader2, Eye, EyeOff } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -19,9 +11,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { UserSchema } from "@/types/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Clock, Eye, EyeOff, Loader2 } from "lucide-react";
+import { signIn } from "next-auth/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const RegisterSchema = UserSchema.extend({
   password: z.string().min(8, "Password must be at least 8 characters"),

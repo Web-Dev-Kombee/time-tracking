@@ -1,34 +1,18 @@
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import {
-  TimeEntryWithRelations,
+  ActivityItem,
+  ActivityResponse,
+  ActivityStats,
+  ActivityType,
   Client,
   ExpenseWithProject,
   InvoiceWithClient,
   ProjectWithClient,
+  TimeEntryWithRelations,
 } from "@/types";
-
-// Define activity-specific interfaces
-interface ActivityItem<T> {
-  type: string;
-  id: string;
-  data: T;
-  updatedAt: Date;
-}
-
-interface ActivityStats {
-  activeProjects: number;
-  totalClients: number;
-  unpaidInvoices: number;
-  hoursThisMonth: number;
-}
-
-interface ActivityResponse {
-  activities: ActivityItem<unknown>[];
-  stats: ActivityStats;
-}
+import { getServerSession } from "next-auth";
+import { NextResponse } from "next/server";
 
 // Helper function to calculate hours tracked this month
 async function calculateHoursThisMonth(userId: string): Promise<number> {
@@ -186,31 +170,31 @@ export async function GET(request: Request) {
     // Merge and sort all activities by updated date
     const allActivities: ActivityItem<unknown>[] = [
       ...formattedTimeEntries.map(entry => ({
-        type: "time_entry",
+        type: "time_entry" as ActivityType,
         id: entry.id,
         data: entry,
         updatedAt: entry.updatedAt,
       })),
       ...expenses.map(expense => ({
-        type: "expense",
+        type: "expense" as ActivityType,
         id: expense.id,
         data: expense,
         updatedAt: expense.updatedAt,
       })),
       ...invoices.map(invoice => ({
-        type: "invoice",
+        type: "invoice" as ActivityType,
         id: invoice.id,
         data: invoice,
         updatedAt: invoice.updatedAt,
       })),
       ...projects.map(project => ({
-        type: "project",
+        type: "project" as ActivityType,
         id: project.id,
         data: project,
         updatedAt: project.updatedAt,
       })),
       ...clients.map(client => ({
-        type: "client",
+        type: "client" as ActivityType,
         id: client.id,
         data: client,
         updatedAt: client.updatedAt,

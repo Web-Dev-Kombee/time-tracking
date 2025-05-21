@@ -1,39 +1,11 @@
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { ReportGroup, TimeReport } from "@/types";
+import { Prisma } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import { Prisma } from "@prisma/client";
 
 // Define report item details type
-interface TimeEntryDetail {
-  id: string;
-  description: string;
-  projectName: string;
-  clientName: string;
-  startTime: Date;
-  endTime: Date | null;
-  duration: number;
-  billable: boolean;
-}
-
-// Define types for our report
-interface TimeReport {
-  totalHours: number;
-  billableHours: number;
-  nonBillableHours: number;
-  billablePercentage: number;
-  data: ReportGroup[];
-}
-
-interface ReportGroup {
-  id: string;
-  name: string;
-  totalTime: number;
-  billableTime: number;
-  nonBillableTime: number;
-  billablePercentage: number;
-  items?: TimeEntryDetail[]; // For nested grouping
-}
 
 export async function GET(request: Request) {
   try {

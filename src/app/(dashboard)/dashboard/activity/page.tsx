@@ -1,60 +1,18 @@
 "use client";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Activity,
+  ActivityClient,
+  ActivityExpense,
+  ActivityInvoice,
+  ActivityProject,
+  ActivityResponse,
+  ActivityTimeEntry,
+} from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { Briefcase, CalendarClock, CreditCard, Receipt, User } from "lucide-react";
 import { toast } from "sonner";
-
-// Define activity types
-type ActivityType = "time_entry" | "client" | "project" | "invoice" | "expense";
-
-interface Client {
-  name: string;
-  email?: string;
-}
-
-interface Project {
-  name: string;
-  client: Client;
-}
-
-interface TimeEntry {
-  startTime: string;
-  endTime?: string;
-  project: Project;
-}
-
-interface InvoiceData {
-  invoiceNumber: string;
-  total: number;
-  client: Client;
-}
-
-interface ExpenseData {
-  description: string;
-  amount: number;
-  project: Project;
-}
-
-// Union type for all possible activity data
-type ActivityData = TimeEntry | Client | Project | InvoiceData | ExpenseData;
-
-interface Activity {
-  id: string;
-  type: ActivityType;
-  data: ActivityData;
-  updatedAt: string;
-}
-
-interface ActivityResponse {
-  activities: Activity[];
-  stats?: {
-    activeProjects: number;
-    totalClients: number;
-    unpaidInvoices: number;
-    hoursThisMonth: number;
-  };
-}
 
 // Fetch activity function
 async function fetchActivity(): Promise<ActivityResponse> {
@@ -102,15 +60,15 @@ export default function ActivityPage() {
     const getTitle = () => {
       switch (type) {
         case "time_entry":
-          return `Time tracked for ${(activityData as TimeEntry).project.name}`;
+          return `Time tracked for ${(activityData as ActivityTimeEntry).project.name}`;
         case "client":
-          return `Client: ${(activityData as Client).name}`;
+          return `Client: ${(activityData as ActivityClient).name}`;
         case "project":
-          return `Project: ${(activityData as Project).name}`;
+          return `Project: ${(activityData as ActivityProject).name}`;
         case "invoice":
-          return `Invoice #${(activityData as InvoiceData).invoiceNumber}`;
+          return `Invoice #${(activityData as ActivityInvoice).invoiceNumber}`;
         case "expense":
-          return `Expense: ${(activityData as ExpenseData).description}`;
+          return `Expense: ${(activityData as ActivityExpense).description}`;
         default:
           return "Activity";
       }
@@ -119,7 +77,7 @@ export default function ActivityPage() {
     const getDescription = () => {
       switch (type) {
         case "time_entry": {
-          const timeData = activityData as TimeEntry;
+          const timeData = activityData as ActivityTimeEntry;
           const duration = timeData.endTime
             ? Math.round(
                 (new Date(timeData.endTime).getTime() - new Date(timeData.startTime).getTime()) /
@@ -131,19 +89,19 @@ export default function ActivityPage() {
           return `${hours}h ${minutes}m for ${timeData.project.client.name}`;
         }
         case "client": {
-          const clientData = activityData as Client;
+          const clientData = activityData as ActivityClient;
           return clientData.email || "No email provided";
         }
         case "project": {
-          const projectData = activityData as Project;
+          const projectData = activityData as ActivityProject;
           return `Client: ${projectData.client.name}`;
         }
         case "invoice": {
-          const invoiceData = activityData as InvoiceData;
+          const invoiceData = activityData as ActivityInvoice;
           return `$${invoiceData.total.toFixed(2)} - ${invoiceData.client.name}`;
         }
         case "expense": {
-          const expenseData = activityData as ExpenseData;
+          const expenseData = activityData as ActivityExpense;
           return `$${expenseData.amount.toFixed(2)} - ${expenseData.project.name}`;
         }
         default:
@@ -169,8 +127,8 @@ export default function ActivityPage() {
         <p>Loading activity feed...</p>
       ) : data?.activities && data.activities.length > 0 ? (
         <div className="space-y-4">
-          {data.activities.map((activity: Activity) => {
-            const { icon, title, description, timestamp } = formatActivity(activity);
+          {data.activities.map(activity => {
+            const { icon, title, description, timestamp } = formatActivity(activity as Activity);
             return (
               <Card key={activity.id} className="overflow-hidden">
                 <div className="flex">

@@ -1,8 +1,8 @@
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import { TimeEntryWithRelations } from "@/types";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { authOptions } from "@/lib/auth";
-import { TimeEntryWithRelations } from "@/types";
 
 // POST to stop a running time entry
 export async function POST(request: Request, { params }: { params: { id: string } }) {

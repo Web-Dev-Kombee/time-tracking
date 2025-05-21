@@ -3,40 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Notification, NotificationsResponse, NotificationType } from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AlertTriangle, Bell, Check, Clock, CreditCard } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-
-// Define TypeScript interfaces
-type NotificationType =
-  | "overdue_invoice"
-  | "upcoming_invoice"
-  | "running_timer"
-  | "payment_received";
-
-interface Notification {
-  id: string;
-  type: NotificationType;
-  title: string;
-  message: string;
-  createdAt: string;
-  read: boolean;
-  entityId?: string; // Optional reference to related entity (invoice, timer, etc.)
-}
-
-interface NotificationCounts {
-  total: number;
-  overdue: number;
-  upcoming: number;
-  running: number;
-  payments: number;
-}
-
-interface NotificationsResponse {
-  notifications: Notification[];
-  counts: NotificationCounts;
-}
 
 // Fetch notifications function
 async function fetchNotifications(): Promise<NotificationsResponse> {

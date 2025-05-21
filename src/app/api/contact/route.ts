@@ -1,3 +1,4 @@
+import { EmailConfig } from "@/types";
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { z } from "zod";
@@ -9,13 +10,6 @@ const contactFormSchema = z.object({
   subject: z.string().min(1, "Please select a subject"),
   message: z.string().min(10, "Message must be at least 10 characters"),
 });
-
-// Email configuration type
-interface EmailConfig {
-  email: string;
-  subject: string;
-  message: string;
-}
 
 const sendEmail = async ({ email, subject, message }: EmailConfig) => {
   // Create reusable transporter object using SMTP transport

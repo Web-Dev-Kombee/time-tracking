@@ -1,20 +1,11 @@
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { TimeEntryWithRelations } from "@/types";
+import { TimeEntrySchemaAPI } from "@/types/schemas";
 import { Prisma } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { z } from "zod";
-
-// Schema for validating time entry data
-const TimeEntrySchema = z.object({
-  description: z.string().optional(),
-  projectId: z.string(),
-  startTime: z.date(),
-  endTime: z.date().optional().nullable(),
-  billable: z.boolean().default(true),
-  userId: z.string(),
-});
 
 // GET all time entries for the user
 export async function GET(request: Request) {
@@ -193,7 +184,7 @@ export async function POST(request: Request) {
       json.endTime = new Date(json.endTime);
     }
 
-    const validatedData = TimeEntrySchema.parse(json);
+    const validatedData = TimeEntrySchemaAPI.parse(json);
 
     // Ensure the time entry belongs to the authenticated user
     if (validatedData.userId !== session.user.id) {
@@ -301,7 +292,7 @@ export async function PUT(request: Request) {
     delete json.userId;
 
     // Validate the data
-    const UpdateTimeEntrySchema = TimeEntrySchema.partial().omit({ userId: true });
+    const UpdateTimeEntrySchema = TimeEntrySchemaAPI.partial().omit({ userId: true });
     const validatedData = UpdateTimeEntrySchema.parse(json);
 
     // If projectId is being changed, verify the project exists and belongs to the user

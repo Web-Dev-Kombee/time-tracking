@@ -1,32 +1,16 @@
 "use client";
 
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { Plus, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { InvoiceStatus } from "@/types";
-
-// Define TypeScript interfaces
-interface Client {
-  id: string;
-  name: string;
-}
-
-interface Invoice {
-  id: string;
-  invoiceNumber: string;
-  client: Client;
-  issueDate: string;
-  dueDate: string;
-  status: InvoiceStatus;
-  total: number;
-}
+import { InvoiceWithDetails, InvoiceStatus } from "@/types";
+import { useQuery } from "@tanstack/react-query";
+import { Filter, Plus } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
 // Fetch invoices function
-async function fetchInvoices(status?: string): Promise<Invoice[]> {
+async function fetchInvoices(status?: string): Promise<InvoiceWithDetails[]> {
   const url = status ? `/api/invoices?status=${status}` : "/api/invoices";
   const res = await fetch(url);
 
@@ -121,7 +105,7 @@ export default function InvoicesPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {invoices.map((invoice: Invoice) => (
+                      {invoices.map((invoice: InvoiceWithDetails) => (
                         <tr key={invoice.id} className="border-b hover:bg-muted/50">
                           <td className="py-3 px-4">{invoice.invoiceNumber}</td>
                           <td className="py-3 px-4">{invoice.client.name}</td>
@@ -184,7 +168,7 @@ export default function InvoicesPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {invoices.map((invoice: Invoice) => (
+                        {invoices.map((invoice: InvoiceWithDetails) => (
                           <tr key={invoice.id} className="border-b hover:bg-muted/50">
                             <td className="py-3 px-4">{invoice.invoiceNumber}</td>
                             <td className="py-3 px-4">{invoice.client.name}</td>

@@ -1,8 +1,8 @@
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import { z } from "zod";
-import { authOptions } from "@/lib/auth";
 
 // Schema for validating time entry update data
 const TimeEntryUpdateSchema = z.object({

@@ -1,70 +1,17 @@
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
+import {
+  ClientStats,
+  RevenueClientWithRelations as ClientWithRelations,
+  RevenueExpense as Expense,
+  RevenueInvoice as Invoice,
+  RevenuePayment as Payment,
+  RevenueProject as Project,
+  RevenueReport,
+  RevenueTimeEntry as TimeEntry,
+} from "@/types";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { authOptions } from "@/lib/auth";
-
-// Define types for our data structures
-interface TimeEntry {
-  id: string;
-  startTime: Date;
-  endTime: Date | null;
-  project: {
-    hourlyRate: number;
-  };
-}
-
-interface Expense {
-  id: string;
-  amount: number;
-  billable: boolean;
-}
-
-interface Payment {
-  id: string;
-  amount: number;
-}
-
-interface Invoice {
-  id: string;
-  total: number;
-  payments: Payment[];
-}
-
-interface Project {
-  id: string;
-  name: string;
-  timeEntries: TimeEntry[];
-  expenses: Expense[];
-  hourlyRate: number;
-}
-
-interface ClientWithRelations {
-  id: string;
-  name: string;
-  projects: Project[];
-  invoices: Invoice[];
-}
-
-interface ClientStats {
-  id: string;
-  name: string;
-  billableAmount: number;
-  expenses: number;
-  invoicedAmount: number;
-  paidAmount: number;
-  outstandingAmount: number;
-}
-
-interface RevenueReport {
-  startDate: string;
-  endDate: string;
-  billableAmount: number;
-  billableExpenses: number;
-  invoicedTotal: number;
-  paidTotal: number;
-  outstandingTotal: number;
-  clientStats: ClientStats[];
-}
 
 export async function GET(request: Request) {
   try {
@@ -222,34 +169,32 @@ export async function GET(request: Request) {
           },
         },
       },
-    })) as ClientWithRelations[];
+    })) as unknown as ClientWithRelations[];
 
     // Transform client data
     const clientStats: ClientStats[] = clientData.map((client: ClientWithRelations) => {
       // Calculate billable time
       const billableTime = client.projects.reduce((clientTotal: number, project: Project) => {
-        return (
-          clientTotal +
-          project.timeEntries.reduce((projectTotal: number, entry: TimeEntry) => {
-            if (!entry.endTime) return projectTotal;
+        const projectTotal = project.timeEntries.reduce((total: number, entry) => {
+          if (!entry.endTime) return total;
 
-            const startTime = new Date(entry.startTime);
-            const endTime = new Date(entry.endTime);
-            const durationHours = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
+          const startTime = new Date(entry.startTime);
+          const endTime = new Date(entry.endTime);
+          const durationHours = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
 
-            return projectTotal + durationHours * project.hourlyRate;
-          }, 0)
-        );
+          return total + durationHours * entry.project.hourlyRate;
+        }, 0);
+
+        return clientTotal + Number(projectTotal);
       }, 0);
 
       // Calculate billable expenses
       const clientExpenses = client.projects.reduce((clientTotal: number, project: Project) => {
-        return (
-          clientTotal +
-          project.expenses.reduce((expenseTotal: number, expense: Expense) => {
-            return expenseTotal + expense.amount;
-          }, 0)
-        );
+        const expenseTotal = project.expenses.reduce((total: number, expense: Expense) => {
+          return total + expense.amount;
+        }, 0);
+
+        return clientTotal + Number(expenseTotal);
       }, 0);
 
       // Calculate invoiced amount
